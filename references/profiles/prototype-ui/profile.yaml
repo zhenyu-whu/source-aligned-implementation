@@ -1,0 +1,4 @@
+profile: prototype-ui
+schema_name: prototype-spec-driven
+schema_dir: schema
+description: Source-aligned implementation profile for reviewed prototype/UI work where source docs define routes, scenes, surfaces, objects, state, fixtures/data, interactions, assets, responsive behavior, and verification.

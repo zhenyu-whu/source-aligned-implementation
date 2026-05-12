@@ -1,0 +1,286 @@
+name: prototype-spec-driven
+version: 1
+description: Prototype workflow - source-truth → proposal → specs → design → tasks with lossless source alignment gates
+artifacts:
+  - id: source-truth
+    generates: source-truth.md
+    description: Exhaustive source-truth extraction for the selected change
+    template: source-truth.md
+    instruction: |
+      Create the source-truth document that captures the complete source-backed scope for this change.
+
+      Core rule:
+      - The schema's primary obligation is lossless derivation from source documents. For the selected change, all relevant source-backed requirements, workflows, states, contracts, edge cases, acceptance criteria, non-goals, and later-change boundaries MUST be extracted, carried forward, implemented, and verified.
+      - Traceability alone is not sufficient. A citation proves origin, not coverage. Every cited source obligation MUST become an explicit Source Truth item and MUST later be represented in proposal scope, specs, design, tasks, and apply evidence unless the source truth itself records a source-backed deferral.
+      - Artifacts MAY summarize source content, but MUST NOT remove implementation-relevant detail. If detail is summarized, the Source Truth item MUST link to the exact original source section that downstream artifacts and implementers must reread.
+      - No artifact may downgrade a source-backed behavior into placeholder, diagnostic state, static rendering, registry entry, mock-only proof, or fixture-only proof unless the original source or change plan explicitly defers that behavior.
+
+      Before writing:
+      - Read the original source documents under `docs/` that define this change. `docs/` is the authoritative source-of-truth directory for product, prototype, architecture, interaction, data/API, system, asset, and verification obligations.
+      - Read the project change plan, source index, control sheet, handoff, or equivalent source document identified by the user request or project context, and locate the exact change row, feature entry, or detailed plan section when one exists.
+      - Read every original PRD, architecture, prototype, design, interaction, API, data, system, and verification document that the change plan, source index, or located plan section names or directly depends on.
+      - Read the source-defined runtime/composition, flow contract, page/surface, object/component, data/fixture, interaction, asset, design-system, and verification documents that are directly affected by the change. Use project context and artifact rules to identify the concrete files and registries for the current repository.
+      - Check `openspec/specs/` only to understand existing capability names and already accepted behavior; do not use existing specs, prior proposal/design/tasks artifacts, implementation files, or current runtime behavior to narrow, replace, or skip original source truth from `docs/`.
+
+      Extraction requirements:
+      - Extract every source-backed item relevant to the current change, including user goals, workflows, functional behavior, UI/UX behavior, state transitions, data models, persistence rules, fixture/shared-state rules, API or backend contracts, mock/service boundaries, permissions, loading/empty/failure/error/disabled states, integration boundaries, performance/security/accessibility constraints when present, responsive behavior, verification requirements, acceptance criteria, explicit non-goals, and later-change boundaries.
+      - A Source Truth item MUST be an implementation-relevant obligation: it must require behavior to implement, behavior to preserve, verification to perform, a boundary to enforce, or a conflict/ambiguity to resolve.
+      - Do NOT create Source Truth items only for workflow metadata, artifact readiness, dependency status, current active-change status, absence of blockers, "no questions", "can proceed", or other process facts. Put those facts in `Conflicts / Ambiguities` or `Source Truth Alignment Gate` instead.
+      - `Boundary: current-change scope` MUST NOT be used for process/readiness facts. It is reserved for source-backed product, system, data, interaction, UI, API, verification, or implementation-boundary obligations that affect implementation.
+      - Each item MUST have a stable ID such as `ST-001`.
+      - Each item MUST include `Source`, `Extract`, `Relevance`, `Implementation Implication`, and `Boundary`.
+      - `Source` MUST cite exact file paths plus headings, stable anchors, row names, scene IDs, route names, object keys, interaction names, API names, asset IDs, fixture slices, or short source phrases where headings are insufficient.
+      - `Extract` MAY copy source text or tightly paraphrase it, but MUST preserve all implementation-relevant details.
+      - `Boundary` MUST say whether the item is current-change scope, preserve-existing scope, explicit later-change scope, explicit non-goal, or unresolved conflict. Do not invent a smaller boundary because implementation seems large.
+      - If source documents conflict, overlap ambiguously, or leave later-change ownership unclear, record a blocker item. Do not silently choose the weaker interpretation.
+
+      Final alignment gate:
+      - `source-truth.md` MUST end with `## Source Truth Alignment Gate`.
+      - The gate MUST list source documents read, source documents intentionally not read with reasons, current-change Source Truth IDs, deferred/non-goal Source Truth IDs, unresolved conflicts, and confirmation that no relevant source-backed obligation was intentionally omitted.
+    requires: []
+
+  - id: proposal
+    generates: proposal.md
+    description: Initial proposal document outlining the prototype change
+    template: proposal.md
+    instruction: |
+      Create the proposal document that establishes WHY this prototype change is needed.
+
+      Before writing:
+      - Read `source-truth.md` first and treat it as the mandatory source extraction index for this change.
+      - Re-read the original source sections referenced by every current-change Source Truth item.
+      - Check `openspec/specs/` to determine whether each capability is new or modified.
+
+      Proposal-specific constraints:
+      - The proposal MUST derive scope from `source-truth.md`. It may group Source Truth items, but MUST NOT omit, soften, or narrow any current-change Source Truth item.
+      - Source Truth references MUST enumerate exact IDs, for example `ST-001, ST-002, ST-003`. Ranges such as `ST-001-ST-010`, `ST-001..ST-010`, or `ST-001 through ST-010` are forbidden in generated artifacts.
+      - The proposal MUST preserve the plan's capability boundary, dependency order, and explicit non-goals unless it calls out a source conflict.
+      - `What Changes` MUST name the in-scope scenes, routes, objects, fixture families, mock assets, interactions, data/API/backend contracts, and verification surface when relevant, with Source Truth IDs.
+      - `Prototype Source Coverage` MUST list exact source files and Source Truth IDs that later specs and design must trace to.
+      - `Non-Goals` MUST include only items backed by source-truth boundaries or global forbidden drift, and MUST cite their Source Truth IDs where applicable.
+      - Do not introduce new page, object, lifecycle stage, overlay, viewport, fixture slice, interaction, asset ID, or route names unless they already exist in the prototype source docs.
+
+      Sections:
+      - **Why**: 1-2 sentences on the prototype dependency, scene gap, or verification gap.
+      - **What Changes**: Bullet list of source-backed changes with Source Truth IDs. Mark breaking changes with **BREAKING**.
+      - **Capabilities**: Identify which specs will be created or modified.
+      - **Prototype Source Coverage**: Exact source docs, key sections, and exact Source Truth IDs this change must preserve.
+      - **Non-Goals**: Explicit forbidden drift and later-change boundaries with Source Truth IDs where applicable.
+      - **Impact**: Affected prototype code areas, fixtures, assets, interactions, verification, dependencies.
+
+      IMPORTANT:
+      - The Capabilities section is the contract between proposal and specs phases. Each capability listed here needs a corresponding spec file.
+      - Keep the proposal concise but traceable. Do not move details out of scope; when summarizing, cite the Source Truth IDs that preserve the detailed obligations.
+    requires:
+      - source-truth
+
+  - id: specs
+    generates: "specs/**/*.md"
+    description: Detailed specifications for the prototype change
+    template: spec.md
+    instruction: |
+      Create specification files that define WHAT the prototype system should do.
+
+      Before writing:
+      - Read `source-truth.md`, proposal, and every original source section referenced by current-change Source Truth IDs.
+      - Re-read the source-defined runtime/composition, canonical vocabulary or registry, data ownership, interaction, service boundary, and verification documents referenced by source-truth, proposal, or project context.
+      - If the change touches visuals, assets, repeated components, objects, surfaces, or responsive behavior, also re-read the source-defined asset, component, design-system, layout, responsive, and verification references.
+      - If modifying an existing capability, read `openspec/specs/<capability>/spec.md` before drafting the delta spec.
+
+      Source Truth closure:
+      - Specs MUST convert every current-change Source Truth item into normative requirements and scenarios, or explicitly cite it as preserved-existing/deferred/non-goal only when `source-truth.md` marks that boundary.
+      - Every current-change Source Truth item MUST be covered by at least one requirement normative statement or scenario.
+      - A scenario is incomplete if it only proves state existence while the Source Truth item describes user behavior, system behavior, data mutation, API behavior, error handling, responsive behavior, or acceptance criteria.
+      - Specs MUST preserve implementation-relevant edge cases, failure states, disabled states, acceptance criteria, data/API contracts, and verification obligations from source truth.
+
+      Create one spec file per capability listed in the proposal's Capabilities section.
+      - New capabilities: use the exact kebab-case name from the proposal (`specs/<capability>/spec.md`).
+      - Modified capabilities: use the existing spec folder name from `openspec/specs/<capability>/` when creating the delta spec at `specs/<capability>/spec.md`.
+
+      Delta operations (use `##` headers):
+      - **ADDED Requirements**: New capabilities
+      - **MODIFIED Requirements**: Changed behavior - MUST include full updated content
+      - **REMOVED Requirements**: Deprecated features - MUST include **Reason** and **Migration**
+      - **RENAMED Requirements**: Name changes only - use `FROM:` / `TO:` format
+
+      Format requirements:
+      - Each requirement: `### Requirement: <name>` followed by normative behavior.
+      - Use SHALL/MUST/MUST NOT for normative requirements.
+      - Every requirement MUST have `Source Truth:` bullets listing the exact Source Truth IDs covered.
+      - Source Truth references MUST enumerate exact IDs, for example `ST-001, ST-002, ST-003`. Ranges such as `ST-001-ST-010`, `ST-001..ST-010`, or `ST-001 through ST-010` are forbidden.
+      - Every requirement MUST have `Source Trace:` bullets that point to concrete original source paths and, where applicable, scene IDs, routes, object states, fixture slices, mock mutations, asset IDs, component specimens, viewport rules, API/data contracts, or key flow names.
+      - Each scenario: `#### Scenario: <name>` with WHEN/THEN format.
+      - **CRITICAL**: Scenarios MUST use exactly 4 hashtags (`####`). Using 3 hashtags or bullets will fail silently.
+      - Every requirement MUST have at least one scenario.
+      - Scenario names SHOULD include a source-backed scene, route, object state, interaction, or key flow when one is relevant.
+
+      Source-defined capture rules:
+      - Specs MUST preserve the source-defined runtime, composition, routing, data, state ownership, and rendering chain. Do not flatten these boundaries into a generic variant unless source truth explicitly allows that simplification.
+      - Specs MUST use canonical identifiers, states, entities, routes, data keys, object keys, events, actions, lifecycle terms, and viewport names from source-defined registries, vocabularies, or equivalent source documents.
+      - Specs MUST NOT introduce unplanned identifiers, routes, scenes, states, objects, fixtures, services, assets, interactions, viewports, variants, or lifecycle terms that are not backed by source truth.
+      - Specs MUST constrain data writes, mock mutations, persistence, side effects, service calls, and integration boundaries to the ownership rules defined by source truth and original source documents.
+      - Specs MUST require every user-visible interaction to trace to a source-backed interaction, flow, command, event, or state transition contract.
+      - Specs MUST require assets, components, repeated UI patterns, layout rules, visual states, and responsive behavior to trace to source-backed asset, component, design, or verification references when applicable.
+      - Specs MUST preserve source-defined semantic distinctions, such as locale boundaries, lifecycle/state/overlay distinctions, permission or entitlement boundaries, service/mock boundaries, persistence boundaries, or equivalent domain-specific separations.
+      - Negative boundaries and forbidden behaviors MUST be captured with MUST NOT, not only as prose non-goals.
+
+      MODIFIED requirements workflow:
+      1. Locate the existing requirement in `openspec/specs/<capability>/spec.md`.
+      2. Copy the ENTIRE requirement block (from `### Requirement:` through all scenarios).
+      3. Paste it under `## MODIFIED Requirements` and edit it to reflect new behavior.
+      4. Ensure the header text matches exactly (whitespace-insensitive).
+
+      Final alignment gate:
+      - Every spec file MUST end with `## Prototype Alignment Gate`.
+      - The gate MUST enumerate Source Truth IDs covered, source docs read, scene/route coverage, object state coverage, fixture/mutation coverage, API/data/backend coverage when relevant, asset/component coverage, responsive coverage, and forbidden drift checked.
+      - If any current-change Source Truth item is not represented in specs, stop and revise source-truth/proposal/specs before continuing.
+      - If the source docs conflict, stop and record the conflict instead of inventing a resolution.
+
+      Specs should be testable. Each scenario is a potential test case.
+    requires:
+      - source-truth
+      - proposal
+
+  - id: design
+    generates: design.md
+    description: Technical design document with prototype implementation details
+    template: design.md
+    instruction: |
+      Create the design document that explains HOW to implement the prototype change.
+
+      Before writing:
+      - Read `source-truth.md`, proposal, and all delta specs for this change.
+      - Read every original source section referenced by current-change Source Truth IDs, proposal `Prototype Source Coverage`, and each spec `Source Trace`.
+      - Re-read the source-defined runtime, service/integration, layout, state, data ownership, interaction, asset/component, responsive, and verification boundary documents relevant to the change.
+      - Use project context and artifact rules to identify the concrete registries, vocabularies, readiness docs, or equivalent source references for the current repository.
+
+      Design-specific constraints:
+      - Design MUST be source-backed. If a design choice cannot trace to Source Truth, proposal/specs, or original source docs, either remove it or record it as an open question.
+      - Design MUST provide an implementation approach for every spec requirement and every current-change Source Truth item.
+      - Design MUST explain how the change consumes and preserves the source-defined runtime, composition, routing/navigation, data, state ownership, and rendering chain.
+      - Design MUST keep source-defined responsibilities separate, including navigation/routing, configuration, data loading, layout/shell, page/surface rendering, object/component host, mutation/side effects, service/mock/integration boundary, asset rendering, interactions, and verification.
+      - Design MUST NOT introduce real services, external integrations, persistence, remote dependencies, backend contracts, or domain capabilities that are not backed by source truth.
+      - Design MUST preserve source-defined stable behavior, state/overlay semantics, context retention, data/mutation ownership boundaries, asset/component identifiers, repeated component contracts, and responsive degradation rules where relevant.
+      - Design MUST explicitly list deferred behavior that belongs to later changes according to source truth, the change plan, or equivalent source-backed boundaries.
+      - Design MUST NOT replace source-backed behavior with placeholder, diagnostic, mock-only, static-only, or fixture-only representation unless `source-truth.md` marks that item as deferred or entry-only.
+      - For each major workflow, surface, API, data contract, or state machine, design MUST explain where it is implemented, how source state/data flows through the system, how user/system events change state, how success/failure/loading/disabled/empty/edge states are handled when source-backed, how backend/API/persistence/contracts are represented when applicable, and how verification proves real behavior rather than merely key/registry/state presence.
+
+      Required sections:
+      - **Context**
+      - **Goals / Non-Goals**
+      - **Prototype Source Map**
+      - **Decisions**
+      - **Runtime / Data Flow Design**
+      - **Fixture / Mutation / Asset Design**
+      - **Page / Object / Responsive Design**
+      - **Verification Design**
+      - **Prototype Alignment Gate**
+      - **Risks / Trade-offs**
+      - **Open Questions**
+
+      The `Prototype Alignment Gate` MUST answer:
+      - Which Source Truth IDs are implemented, preserved, or deferred.
+      - Source Truth ID lists MUST enumerate exact IDs. Ranges such as `ST-001-ST-010`, `ST-001..ST-010`, or `ST-001 through ST-010` are forbidden.
+      - Which source-defined canonical identifiers, states, routes, data keys, object/component keys, events, actions, and lifecycle terms are used.
+      - Whether source trace is complete.
+      - Whether any new route, scene, page, surface, object, component, lifecycle, overlay, state, fixture/data slice, service, asset, viewport, or variant was introduced.
+      - Whether interactions trace to source-backed interaction, flow, command, event, or state transition contracts.
+      - Whether data writes, mutations, persistence, and side effects stay inside source-defined ownership boundaries.
+      - Whether assets, components, repeated UI patterns, layout rules, visual states, and responsive behavior trace to source-backed references.
+      - Whether responsive obligations are captured.
+      - Whether later-change boundaries are preserved.
+    requires:
+      - source-truth
+      - proposal
+      - specs
+
+  - id: tasks
+    generates: tasks.md
+    description: Implementation checklist with prototype traceability and verification
+    template: tasks.md
+    instruction: |
+      Create the task list that breaks down implementation work.
+
+      Before writing:
+      - Read `source-truth.md`, proposal, all delta specs, and design.
+      - Read every original source section referenced by current-change Source Truth IDs, `Prototype Source Coverage`, spec `Source Trace`, design `Prototype Source Map`, and design `Prototype Alignment Gate`.
+      - Treat missing or failed alignment gates as blockers. Revise upstream artifacts before writing tasks.
+
+      **IMPORTANT: Follow the template's checkbox format exactly.** The apply phase parses `- [ ]` leaf tasks to track progress. Tasks not using that format will not be tracked.
+
+      Task-writing constraints:
+      - Treat `tasks.md` as a source-truth closure index and execution index, not as a compressed replacement for source-truth/proposal/specs/design/source docs.
+      - Group related tasks under `##` numbered headings.
+      - Each executable task MUST be a checkbox: `- [ ] X.Y Task description`.
+      - Each checkbox MUST be followed by an indented trace block with `Source Truth:`, `Spec:`, `Design:`, `Source:`, `Preserve:`, and `Proof:` fields.
+      - `Source Truth:` MUST list the exact Source Truth IDs implemented or verified by the task, or write `Not applicable` only for concrete repository/setup tasks that have no source-truth obligation by design.
+      - Source Truth references in task trace blocks and coverage tables MUST enumerate exact IDs, for example `ST-001, ST-002, ST-003`. Ranges such as `ST-001-ST-010`, `ST-001..ST-010`, or `ST-001 through ST-010` are forbidden because they cause downstream implementers to skip source details.
+      - `Spec:` MUST name the exact requirement(s) and scenario(s) implemented, or write `Not applicable` only for concrete repository/setup tasks that have no requirement by design.
+      - `Design:` MUST name the design section, decision, page/object/responsive design obligation, or write `Not applicable` with a concrete reason.
+      - `Source:` MUST cite concrete source docs and the source rule being preserved; cite exact headings, scene/route/surface/object keys, fixture/data slices, mutations, asset IDs, component specimens, viewport rules, API/data contracts, or key flow names when line numbers are not stable.
+      - `Preserve:` MUST list non-compressible constraints that implementation must not simplify, especially source-defined collections, UI regions, action placement, action cardinality, responsive degradation, context retention, object/component host retention, data ownership, and forbidden drift.
+      - `Proof:` MUST state observable completion evidence that verifies the linked Source Truth IDs, spec scenario(s), design obligation(s), and preserve constraints at source-equivalent fidelity.
+      - Tasks MUST be ordered by dependency and must not ask implementation to invent behavior outside specs/design/source docs.
+      - Tasks MUST cover every current-change Source Truth item, every in-scope Requirement/Scenario, and every design obligation.
+      - Tasks MUST NOT include a standalone `Prototype Source Lock` or equivalent source-reading/reconciliation-only section.
+      - Source alignment obligations MUST be embedded in each task's `Source:`, `Preserve:`, and `Proof:` fields; any drift guard or reconciliation work that changes code/tests MUST be placed in the relevant implementation or verification section.
+      - Tasks MUST include verification for relevant scene/surface smoke, object/component open/close, key flows, data mutations, assets/components, and responsive viewports.
+      - Tasks MUST split independently failing outcomes, especially separate routes, surfaces, object states, mutation outcomes, failure/recovery paths, permission/entitlement blocks, and responsive degradation.
+      - Tasks MUST NOT collapse page/surface body, object/component state, interaction mutation, responsive, and verification into a single broad checkbox.
+      - Tasks MUST NOT collapse a source-backed collection, component slot, UI region, action placement, or action cardinality into a simpler implementation unless specs/design explicitly allow that simplification.
+      - Verification tasks MUST check structure, count, region, state, and interaction evidence when those are part of the linked source/design constraints; text-existence-only checks are insufficient for collection or action-placement behavior.
+      - If a Source Truth item describes user behavior, Proof MUST use user-equivalent interaction evidence.
+      - If a Source Truth item describes API behavior, Proof MUST call or test that contract.
+      - If a Source Truth item describes persistence, fixture, local state, or data mutation, Proof MUST assert the stored/resulting data.
+      - If a Source Truth item describes failure, edge, disabled, loading, or empty behavior, Proof MUST exercise that path.
+      - If a Source Truth item describes layout, visual, responsive, or accessibility behavior, Proof MUST inspect rendered output at the relevant fidelity.
+      - Proof based only on existence of a key, registry entry, fixture variant, placeholder host, mock state, or semantic attribute is insufficient when source truth describes executable behavior.
+
+      Requirement coverage gate:
+      - `tasks.md` MUST include a non-checkbox `## Requirement Coverage` section.
+      - The section MUST contain exactly three non-checkbox coverage tables, in this order: `### Source Truth Coverage`, `### Requirement / Scenario Coverage`, and `### Design Obligation Coverage`.
+      - `Source Truth Coverage` MUST use these columns exactly: `Source Truth ID`, `Source Truth Summary`, `Implementation Task IDs`, `Verification Task IDs`, `Verification Proof`.
+      - `Source Truth Coverage` MUST have one row for every current-change Source Truth item. The `Source Truth ID` cell MUST contain exactly one Source Truth ID, not multiple IDs and not a range.
+      - `Requirement / Scenario Coverage` MUST use these columns exactly: `Capability`, `Requirement`, `Scenario`, `Source Truth IDs`, `Implementation Task IDs`, `Verification Task IDs`, `Verification Proof`.
+      - `Requirement / Scenario Coverage` MUST have one row for every in-scope Requirement scenario. The `Source Truth IDs` cell MUST enumerate exact Source Truth IDs related to that scenario, or write `Not applicable` only for concrete repository/setup coverage that has no source-truth obligation by design.
+      - `Design Obligation Coverage` MUST use these columns exactly: `Design Section`, `Design Obligation`, `Source Truth IDs`, `Implementation Task IDs`, `Verification Task IDs`, `Verification Proof`.
+      - `Design Obligation Coverage` MUST have one row for every material design obligation that affects implementation, preservation, or verification. The `Source Truth IDs` cell MUST enumerate exact Source Truth IDs related to that obligation, or write `Not applicable` only for concrete repository/setup coverage that has no source-truth obligation by design.
+      - All coverage rows MUST map to one or more implementation task IDs, verification task IDs, and source-equivalent verification proof.
+      - Source Truth references in all coverage tables MUST enumerate exact Source Truth IDs and MUST NOT use Source Truth ID ranges.
+      - The coverage tables are a generation-quality gate: if any Source Truth item, scenario, or material design obligation has no task ID or verification proof, revise upstream artifacts or tasks before apply.
+      - No executable work should appear only in the coverage tables; executable work must still be represented by checkbox tasks.
+
+      Recommended top-level order:
+      1. `Runtime / Data / Asset`
+      2. `Page Body`
+      3. `Object State`
+      4. `Interaction / Mutation`
+      5. `Responsive / Visual Fidelity`
+      6. `Verification`
+
+      Final check before moving on:
+      - Confirm each current-change Source Truth item and each key source-backed scenario has at least one implementation task and one verification task unless source-truth explicitly marks it as documentation-only or deferred.
+      - Confirm every row in all three `Requirement Coverage` tables has concrete task IDs and proof.
+      - Confirm every task trace block links back to specs/design/source docs and includes preserve constraints where relevant.
+      - Confirm no task asks for unplanned services, integrations, routes, scenes, pages, surfaces, objects, components, states, assets, or source-out-of-scope behavior.
+      - Confirm each task has an observable proof, not just a file-edit statement.
+    requires:
+      - source-truth
+      - specs
+      - design
+
+apply:
+  requires: [tasks]
+  tracks: tasks.md
+  instruction: |
+    Read source-truth, proposal, specs, design, tasks, and every cited original source section before coding.
+    Before editing for any task, read that task's `Source Truth:`, `Spec:`, `Design:`, `Source:`, `Preserve:`, and `Proof:` fields, the linked Source Truth items, and the original source sections they cite.
+    If a pending task is missing those trace fields, or if its trace does not cover the relevant Source Truth item, Requirement scenario, or design obligation, pause and update artifacts before implementation.
+    If any artifact uses Source Truth ID ranges such as `ST-001-ST-010`, pause and update artifacts to enumerate exact Source Truth IDs before implementation.
+    Work through pending tasks in order and mark complete as you go.
+    Do not implement behavior that cannot trace back to the OpenSpec artifacts, Source Truth IDs, and original source docs.
+    Do not mark a task complete unless its `Proof:` has been performed and the linked Source Truth item(s), spec scenario(s), design obligation(s), original source sections, and preserve constraints are satisfied.
+    If the task summary is weaker than source-truth or original source docs, pause and update artifacts. Do not implement the weaker task.
+    If an implementation still uses placeholder, diagnostic host, static-only, registry-only, fixture-only, or mock-state-only representation for a current-change executable behavior, do not mark the task complete unless source-truth explicitly defers that behavior.
+    After all tasks are checked off, audit all `Requirement Coverage` tables against Source Truth IDs, completed tasks, implementation evidence, verification evidence, and original source sections before treating the change as ready.
+    Pause and update artifacts if implementation reveals a mismatch with source-truth or original source truth.

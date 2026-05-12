@@ -1,0 +1,4 @@
+interface:
+  display_name: "Source Aligned Implementation"
+  short_description: "Set up source-aligned OpenSpec schemas"
+  default_prompt: "Use $source-aligned-implementation to set up OpenSpec source-aligned implementation for this repository."
