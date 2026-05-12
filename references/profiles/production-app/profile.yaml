@@ -1,0 +1,4 @@
+profile: production-app
+schema_name: production-spec-driven
+schema_dir: schema
+description: Source-aligned implementation profile for production application work where PRD, architecture, and reviewed prototype docs define product behavior, production module boundaries, data/API contracts, security/privacy, async processing, observability, deployment, UX fidelity, and verification.

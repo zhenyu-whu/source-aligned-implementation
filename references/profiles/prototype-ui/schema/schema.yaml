@@ -16,7 +16,7 @@ artifacts:
       - No artifact may downgrade a source-backed behavior into placeholder, diagnostic state, static rendering, registry entry, mock-only proof, or fixture-only proof unless the original source or change plan explicitly defers that behavior.
 
       Before writing:
-      - Read the original source documents under `docs/` that define this change. `docs/` is the authoritative source-of-truth directory for product, prototype, architecture, interaction, data/API, system, asset, and verification obligations.
+      - Read the original source documents that define this change, under `docs/` or the source-document roots identified by the user request or project context. Those source roots are authoritative for product, prototype, architecture, interaction, data/API, system, asset, and verification obligations.
       - Read the project change plan, source index, control sheet, handoff, or equivalent source document identified by the user request or project context, and locate the exact change row, feature entry, or detailed plan section when one exists.
       - Read every original PRD, architecture, prototype, design, interaction, API, data, system, and verification document that the change plan, source index, or located plan section names or directly depends on.
       - Read the source-defined runtime/composition, flow contract, page/surface, object/component, data/fixture, interaction, asset, design-system, and verification documents that are directly affected by the change. Use project context and artifact rules to identify the concrete files and registries for the current repository.

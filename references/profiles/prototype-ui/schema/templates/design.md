@@ -40,7 +40,7 @@
 - Canonical keys used: <!-- state keys, stage keys, overlay keys, scene IDs, object keys -->
 - Source trace complete: <!-- yes/no plus missing items -->
 - No new scene/page/object/lifecycle/overlay introduced: <!-- yes/no -->
-- Interactions trace to `interaction-map.md`: <!-- yes/no or not applicable -->
+- Interactions trace to source-backed interaction map or equivalent source document: <!-- yes/no or not applicable -->
 - Fixture writes stay inside allowed slices/local state: <!-- yes/no or not applicable -->
 - Assets/components trace to readiness docs: <!-- yes/no or not applicable -->
 - Responsive obligations captured: <!-- yes/no or not applicable -->

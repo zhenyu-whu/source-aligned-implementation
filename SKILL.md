@@ -1,11 +1,11 @@
 ---
 name: source-aligned-implementation
-description: Set up source-aligned OpenSpec implementation workflows in a repository. Use when the user wants to initialize or switch an OpenSpec schema/profile so implementation tasks remain fully aligned to original PRD, architecture, prototype, API, data, design, and verification source documents; supports profile selection such as prototype-ui and installs matching schemas, agent-runtime constraints, config, and an AGENTS.md runtime section reference.
+description: Set up source-aligned OpenSpec implementation workflows in a repository. Use when the user wants to initialize or switch an OpenSpec schema/profile so implementation tasks are guided by original PRD, architecture, prototype, API, data, design, and verification source documents; supports profile selection such as prototype-ui and production-app and installs matching schemas, agent-runtime constraints, config, and an AGENTS.md runtime section reference.
 ---
 
 # Source-Aligned Implementation
 
-Use this skill to configure a repository so OpenSpec artifacts and apply-time implementation enforce source-document alignment from original design docs through tasks and proof.
+Use this skill to configure a repository so OpenSpec artifacts and apply-time implementation enforce source-document alignment from original source documents through tasks and proof.
 
 ## Workflow
 
@@ -40,7 +40,8 @@ Use this skill to configure a repository so OpenSpec artifacts and apply-time im
 
 ## Bundled Resources
 
-- `references/profiles/prototype-ui/`: profile for reviewed prototype/UI implementation work. The bundled schema is the current project's source-aligned prototype schema.
+- `references/profiles/prototype-ui/`: profile for reviewed prototype/UI implementation work. The bundled schema is a source-aligned prototype/UI schema.
+- `references/profiles/production-app/`: profile for production application implementation work. The bundled schema is a source-aligned production schema.
 - `references/agent-runtime/`: shared runtime constraints for OpenSpec propose/apply/archive workflows and the `AGENTS.md` runtime section reference.
 - `scripts/setup_source_aligned.py`: deterministic installer for schemas, runtime files, and `openspec/config.yaml`.
 
@@ -48,7 +49,7 @@ Use this skill to configure a repository so OpenSpec artifacts and apply-time im
 
 Each profile directory must contain:
 
-- `profile.yaml` with `profile`, `schema_name`, and `schema_dir`.
+- `profile.yaml` with `profile`, `schema_name`, and optional `schema_dir` (defaults to `schema` when omitted).
 - The schema directory named by `schema_dir`, containing `schema.yaml` and any templates.
 
 The setup script installs the schema to `openspec/schemas/<schema_name>/` and switches `openspec/config.yaml` to that schema.
