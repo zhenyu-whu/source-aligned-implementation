@@ -24,6 +24,22 @@ artifacts:
       - Read every original PRD, architecture, prototype, design, interaction, API, data, security, ops, deployment, and verification document that the change plan, source index, or located plan section names or directly depends on.
       - Check `openspec/specs/` only to understand existing capability names and already accepted behavior; do not use existing specs, prior proposal/design/tasks artifacts, implementation files, or current runtime behavior to narrow, replace, or skip original source truth from `docs/`.
 
+      Structured source-reading workflow:
+      - Before extracting Source Truth items, create a Source Manifest for this change. Classify source documents as `required`, `conditionally relevant and read`, `reference-only`, or `intentionally not read`.
+      - `required` documents are the project change plan, control sheet, handoff, source index, and every product PRD, architecture/module boundary, prototype/UX, data/API, security/privacy, ops/deployment, observability, and verification document directly named by the located change row or feature entry.
+      - `conditionally relevant and read` documents include every route, workflow, domain, DTO/API, database/entity/migration, command, async/realtime/job, AI/provider, storage/asset, auth/security, deployment, observability, prototype, or decision document directly referenced by required documents for the selected change's product surfaces, data contracts, runtime boundaries, or later-change boundaries.
+      - `reference-only` documents such as `openspec/specs/` may be used only for existing capability names and accepted behavior boundaries; they MUST NOT narrow, replace, or skip original source truth from source documents.
+      - `intentionally not read` is allowed only with a concrete reason based on the manifest, such as no product workflow, route, module, command, API, data/entity, job/event, asset/storage, security, deployment, or verification overlap with the current change. Convenience, expected irrelevance, or large file size is not a valid reason.
+      - For each source document read, maintain a Source Coverage Ledger entry with exact path, sections/headings or anchors read, relevant extraction buckets, and whether the document contributes current-change, preserve-existing, deferred/non-goal, unresolved-conflict, or no-current-change-impact material.
+      - The Source Manifest and Source Coverage Ledger are part of `source-truth.md`; they are not proposal/design summaries and must not be used to reduce the reading obligation.
+
+      Extraction buckets:
+      - Before consolidating final Source Truth items, organize extracted obligations into named buckets relevant to the selected change.
+      - Use these buckets when applicable: `product / workflow scope`, `architecture / module boundaries`, `domain / data / migrations`, `API / auth / security`, `async / realtime / AI / worker`, `storage / assets`, `frontend / UX / prototype fidelity`, `observability / ops / deployment`, `verification obligations`, and `later-change / non-goal boundaries`.
+      - Add a change-specific bucket when source documents contain obligations that do not fit the standard buckets; do not drop them.
+      - Every required or conditionally relevant document read MUST either contribute to at least one bucket, be represented by an unresolved conflict, or be listed in the final gate with a concrete `no-current-change-impact` reason.
+      - Buckets are an intermediate coverage mechanism. Consolidated Source Truth items may group related obligations, but MUST preserve all implementation-relevant details and exact source references from the bucket notes.
+
       Extraction requirements:
       - Extract every source-backed item relevant to the current production change, including user goals, workflows, functional behavior, UI/UX behavior, state transitions, data models, persistence rules, migrations, API contracts, domain commands, worker/job behavior, SSE/realtime contracts, AI provider boundaries, auth and authorization rules, privacy/security constraints, storage and asset access rules, idempotency, locks, error handling, failure/retry/recovery paths, billing/entitlement rules, observability/audit requirements, environment/deployment constraints, test requirements, acceptance criteria, explicit non-goals, and later-change boundaries.
       - A Source Truth item MUST be an implementation-relevant obligation: it must require behavior to implement, behavior to preserve, verification to perform, a boundary to enforce, or a conflict/ambiguity to resolve.
@@ -39,6 +55,9 @@ artifacts:
       Final alignment gate:
       - `source-truth.md` MUST end with `## Source Truth Alignment Gate`.
       - The gate MUST list source documents read, source documents intentionally not read with reasons, current-change Source Truth IDs, preserve-existing Source Truth IDs, deferred/non-goal Source Truth IDs, unresolved conflicts, and confirmation that no relevant source-backed obligation was intentionally omitted.
+      - The gate MUST include a coverage checklist that confirms every manifest-required document is covered by Source Truth, deferred/non-goal Source Truth, unresolved conflict, or a concrete no-current-change-impact note.
+      - The gate MUST confirm every applicable extraction bucket is covered by at least one Source Truth item or a deferred/non-goal item.
+      - When the change defines named product workflows, routes, modules, domain commands, APIs, DTOs, database entities/tables, migrations, job/event types, provider boundaries, asset/storage IDs, auth/security rules, entitlement names, deployment environments, prototype states, or verification checks, the gate MUST enumerate those covered identifiers explicitly or record an unresolved conflict.
     requires: []
 
   - id: proposal
