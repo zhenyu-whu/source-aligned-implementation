@@ -14,44 +14,31 @@
 ## 强制 Subagent 分派
 
 1. 主 agent 必须为第一个可写 `source-truth` artifact 直接创建一个独立 subagent，由该 subagent 生成或修订 `source-truth.md`。不得把 subagent 分派降级为主 agent 直接编写。
-2. 本运行文档构成 `openspec-propose` source-truth 阶段的显式分派指令；只要用户已要求使用 `openspec-propose` 创建 OpenSpec change，且 `source-truth` 是当前可写 artifact，主 agent 不得再要求用户额外确认或授权 subagent 分派。
-3. 若运行环境没有可用 subagent 能力，或更高优先级规则明确禁止创建 subagent，主 agent 必须暂停 `openspec-propose` 后续 artifact 生成并报告 blocker；不得静默改为主 agent 自行生成 `source-truth.md`。
-4. 该 subagent 只负责完成 `source-truth.md`。不得同时起草、修改或预填 proposal、specs、design、tasks。
-5. 启动 subagent 时使用显式任务包；默认不要 fork 完整对话历史，除非该 artifact 依赖尚未写入文件的关键对话决策。
-6. 任务包必须包含 change 意图、schema 名称、当前可写 artifact、完整 `source-truth` instruction/template/outputPath/dependencies、已知 source 文档路径，以及交付物/最终回复要求。
-7. 必须明确告知 subagent：source 文档缺失、source 冲突、change 边界不清、用户请求与 source 不一致、或 schema instruction 无法满足时，必须记录 blocker，不得静默选择较弱解释。
+2. 本运行文档构成 `openspec-propose` source-truth 阶段的项目级显式分派指令。用户要求使用 `openspec-propose` 创建 OpenSpec change，且 `source-truth` 是当前可写 artifact 时，即视为用户已明确授权主 agent 为该 artifact 创建 subagent。
+3. 主 agent 不得在该流程中再次要求用户确认或授权 subagent 分派；也不得以“需要用户明确授权 subagent”为由暂停在 `source-truth` 阶段。
+4. 若运行环境没有可用 subagent 能力，或平台 / 更高优先级规则硬性禁止创建 subagent，主 agent 必须暂停 `openspec-propose` 后续 artifact 生成并报告 blocker；不得静默改为主 agent 自行生成 `source-truth.md`。
+5. 该 subagent 只负责完成 `source-truth.md`。不得同时起草、修改或预填 proposal、specs、design、tasks。
+6. 启动 subagent 时使用显式任务包；默认不要 fork 完整对话历史，除非该 artifact 依赖尚未写入文件的关键对话决策。
+7. 任务包必须包含 change 意图、schema 名称、当前可写 artifact、完整 `source-truth` instruction/template/outputPath/dependencies、已知 source 文档路径，以及交付物/最终回复要求。
+8. 必须明确告知 subagent：source 文档缺失、source 冲突、change 边界不清、用户请求与 source 不一致、或 schema instruction 无法满足时，必须记录 blocker，不得静默选择较弱解释。
 
 ## 分阶段 Source Truth 任务包
 
-为避免 subagent 在大范围 source reading 中长期停留在不可观察的阅读 / 规划阶段，主 agent 的任务包必须要求 subagent 按以下顺序写入同一个 `source-truth.md`。这些步骤不放松 schema 的完整性要求，只把完整阅读与无损抽取拆成可审查的中间结构。
+为避免 subagent 在大范围 source reading 中长期停留在不可观察的阅读 / 规划阶段，主 agent 的任务包必须要求 subagent 增量写入同一个 `source-truth.md`。
 
-1. **Source Manifest**
-   - 先根据 change 意图、change plan、control sheet、handoff、schema instruction 与用户指定文档列出 source manifest。
-   - manifest 至少区分 `required`、`conditionally relevant and read`、`reference-only`、`intentionally not read`。
-   - change plan 或 handoff 明确点名的 readiness、system、source、PRD、architecture、data/API、security/ops、verification 文档默认属于 `required`，不得因为文档多而跳过。
-   - 被 required 文档直接引用且影响当前 change 的 page/object/PRD/architecture/API/data/system/security/ops/verification 文档属于 `conditionally relevant and read`，必须读取后再关闭 source-truth。
+1. subagent 不得等全部 source reading 完成后才首次写入 `source-truth.md`。
+2. subagent 应按当前 schema template 的自然顺序构建产物：先写骨架和 `Source Manifest`，再随 source reading 进度更新 `Source Coverage Ledger` 与 `Extraction Buckets`，最后合并 `Source Truth Items`、deferred/non-goal、conflicts 和 alignment gate。
+3. 阶段性内容可以是不完整草稿，但必须保持结构可审查，并清楚标明未完成部分、待覆盖 source 或 blocker。
+4. 增量写入是 source-truth artifact 的自然构建流程，不要求额外创建独立 heartbeat 文件或复杂心跳协议。
+5. 最终回复前，subagent 必须完成 schema instruction 要求的 source coverage 和 alignment gate；不得以阶段性草稿冒充完成品。
 
-2. **Source Coverage Ledger**
-   - 每读完一个文档，立刻在 `source-truth.md` 的 ledger 中记录 exact path、sections/headings/anchors read、extraction buckets、coverage outcome。
-   - coverage outcome 必须指向 Source Truth ID、deferred/non-goal Source Truth ID、unresolved conflict，或写明具体 `no-current-change-impact` reason。
-   - 不允许把“尚未判断”“可能无关”“文件太大”作为最终 coverage outcome。
+## 主 Agent 等待与关闭约束
 
-3. **Extraction Buckets**
-   - subagent 必须先按 schema template 的 buckets 归集 obligations，再合并 Source Truth items。
-   - bucket 名称以当前 schema template 为准；若 template 未列明某个 source-backed obligation 的 bucket，必须新增 change-specific bucket，不得丢弃。
-   - 常见 prototype buckets 包括 runtime / scene-loader、scene fixtures、shared slices、mock mutations、object-state fixtures、visual assets、mark / selection / token payloads、export preview / record、state vocabulary / forbidden drift、component / responsive constraints、verification obligations、later-change / non-goal boundaries。
-   - 常见 production buckets 包括 product / workflow scope、architecture / module boundaries、domain / data / migrations、API / auth / security、async / realtime / AI / worker、storage / assets、frontend / UX / prototype fidelity、observability / ops / deployment、verification obligations、later-change / non-goal boundaries。
+主 agent 的默认行为是持续等待 subagent 完成 `source-truth.md`，不得因为耗时较长、`wait_agent` 超时、目标文件暂时不存在或阶段性内容不完整而打断、催促或关闭 subagent。只有出现明确不可继续信号时，主 agent 才可介入：
 
-4. **Source Truth Consolidation**
-   - bucket 内容完成后，再合并成稳定 `ST-001` 等 Source Truth items。
-   - Source Truth item 可以合并多个相邻 source obligations，但不得删掉实现相关细节、命名标识、边界、失败/禁用/恢复规则或验收义务。
-   - 每个 item 仍必须包含 `Source`、`Extract`、`Relevance`、`Implementation Implication`、`Boundary`。
-
-5. **Alignment Gate**
-   - 最终 gate 必须核对 manifest-required 文档、conditional 文档、bucket、named identifiers 与 Source Truth IDs 的覆盖。
-   - 如果任一 required / conditional source 尚未读取或无法覆盖，subagent 必须记录 unresolved conflict / blocker，而不是生成“无冲突”结论。
-
-任务包应明确：subagent 可以分批写入 `source-truth.md`，但最终回复前必须完成 manifest 中所有 required 与 conditionally relevant 文档的读取和 gate 覆盖；不得以阶段性草稿冒充完成品。
+   - subagent 线程已明确 `shutdown`、`failed` 或工具返回不可恢复错误；
+   - subagent 明确报告 blocker，且 blocker 阻止继续生成 artifact；
+   - 用户明确要求暂停、停止、关闭或重新分派 subagent。
 
 ## 主 Agent 审查门禁
 

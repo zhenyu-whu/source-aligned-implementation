@@ -2,6 +2,7 @@
 
 <!--
 Map every current-change Source Truth item, Requirement scenario, and material design obligation to implementation task IDs, verification task IDs, and verification proof.
+Also map every deferred/non-goal, preserve-existing, or unresolved-conflict Source Truth ID that is referenced anywhere in this tasks file as a preserve constraint, forbidden-drift boundary, negative requirement, implementation constraint, verification obligation, or coverage-table reference.
 This section is a generation-quality gate, not executable work. Do not put checkbox tasks here.
 Use one row per source-truth item, requirement scenario, or material design obligation. Do not use aggregate rows as a substitute for covering the underlying scenarios or obligations.
 -->
@@ -10,7 +11,7 @@ Use one row per source-truth item, requirement scenario, or material design obli
 
 | Source Truth ID | Source Truth Summary | Implementation Task IDs | Verification Task IDs | Verification Proof |
 | --- | --- | --- | --- | --- |
-| <!-- ST-001; exactly one ID per row, no ranges such as ST-001-ST-010 --> | <!-- Short source-backed obligation summary. --> | <!-- e.g. 2.1, 4.2 --> | <!-- e.g. 6.1, 6.3 --> | <!-- Source-equivalent proof: user interaction, API test, data assertion, edge path, rendered layout check, etc. --> |
+| <!-- ST-001; exactly one ID per row, no ranges such as ST-001-ST-010. Include every current-change Source Truth item and every ST ID referenced anywhere in this tasks file. --> | <!-- Short source-backed obligation summary, including deferred/non-goal boundary summaries when the row is a preserve or forbidden-drift item. --> | <!-- e.g. 2.1, 4.2 --> | <!-- e.g. 6.1, 6.3 --> | <!-- Source-equivalent proof: user interaction, API test, data assertion, edge path, rendered layout check, forbidden-drift/static check, etc. --> |
 
 ### Requirement / Scenario Coverage
 

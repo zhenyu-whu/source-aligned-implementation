@@ -251,6 +251,7 @@ artifacts:
       - `Proof:` MUST state observable completion evidence that verifies the linked Source Truth IDs, spec scenario(s), design obligation(s), and preserve constraints at source-equivalent fidelity.
       - Tasks MUST be ordered by dependency and must not ask implementation to invent behavior outside specs/design/source docs.
       - Tasks MUST cover every current-change Source Truth item, every in-scope Requirement/Scenario, and every design obligation.
+      - Tasks MUST also cover every deferred, non-goal, preserve-existing, or unresolved-conflict Source Truth ID that is used as a preserve constraint, forbidden-drift guard, negative boundary, verification obligation, or coverage reference anywhere in `tasks.md`.
       - Tasks MUST NOT include a standalone `Prototype Source Lock`, `Production Source Lock`, or equivalent source-reading/reconciliation-only section.
       - Source alignment obligations MUST be embedded in each task's `Source:`, `Preserve:`, and `Proof:` fields; any drift guard or reconciliation work that changes code/tests MUST be placed in the relevant implementation or verification section.
       - Tasks MUST include verification for relevant domain rules, database transactions/migrations, API contracts, auth/security/privacy paths, worker/job/reconciler behavior, SSE/outbox behavior, AI provider sandbox behavior, storage/asset access, UI workflow, scene/surface smoke, key flows, failure/recovery paths, accessibility/responsive behavior, observability/audit emissions, and deployment readiness.
@@ -271,13 +272,16 @@ artifacts:
       - `tasks.md` MUST include a non-checkbox `## Requirement Coverage` section.
       - The section MUST contain exactly three non-checkbox coverage tables, in this order: `### Source Truth Coverage`, `### Requirement / Scenario Coverage`, and `### Design Obligation Coverage`.
       - `Source Truth Coverage` MUST use these columns exactly: `Source Truth ID`, `Source Truth Summary`, `Implementation Task IDs`, `Verification Task IDs`, `Verification Proof`.
-      - `Source Truth Coverage` MUST have one row for every current-change Source Truth item. The `Source Truth ID` cell MUST contain exactly one Source Truth ID, not multiple IDs and not a range.
+      - `Source Truth Coverage` MUST have one row for every Source Truth ID referenced anywhere in `tasks.md`, including task trace blocks, `Source Truth Coverage`, `Requirement / Scenario Coverage`, `Design Obligation Coverage`, `Preserve:`, and `Proof:` fields.
+      - `Source Truth Coverage` MUST include all current-change Source Truth items even if they are not referenced elsewhere, and MUST include any deferred/non-goal, preserve-existing, or unresolved-conflict Source Truth item whenever that ID is cited as a preservation rule, forbidden-drift boundary, negative requirement, implementation constraint, verification obligation, or coverage-table reference.
+      - The `Source Truth ID` cell MUST contain exactly one Source Truth ID, not multiple IDs and not a range.
       - `Requirement / Scenario Coverage` MUST use these columns exactly: `Capability`, `Requirement`, `Scenario`, `Source Truth IDs`, `Implementation Task IDs`, `Verification Task IDs`, `Verification Proof`.
       - `Requirement / Scenario Coverage` MUST have one row for every in-scope Requirement scenario. The `Source Truth IDs` cell MUST enumerate exact Source Truth IDs related to that scenario, or write `Not applicable` only for concrete repository/setup coverage that has no source-truth obligation by design.
       - `Design Obligation Coverage` MUST use these columns exactly: `Design Section`, `Design Obligation`, `Source Truth IDs`, `Implementation Task IDs`, `Verification Task IDs`, `Verification Proof`.
       - `Design Obligation Coverage` MUST have one row for every material design obligation that affects implementation, preservation, or verification. The `Source Truth IDs` cell MUST enumerate exact Source Truth IDs related to that obligation, or write `Not applicable` only for concrete repository/setup coverage that has no source-truth obligation by design.
       - All coverage rows MUST map to one or more implementation task IDs, verification task IDs, and source-equivalent verification proof.
       - Source Truth references in all coverage tables MUST enumerate exact Source Truth IDs and MUST NOT use Source Truth ID ranges.
+      - Before finalizing `tasks.md`, collect the set of all `ST-###` IDs appearing anywhere in the file and compare it with the `Source Truth Coverage` table; if any referenced Source Truth ID has no single-ID row, revise the table before proceeding.
       - The coverage tables are a generation-quality gate: if any Source Truth item, scenario, or material design obligation has no task ID or verification proof, revise upstream artifacts or tasks before apply.
       - No executable work should appear only in the coverage tables; executable work must still be represented by checkbox tasks.
 
@@ -291,6 +295,7 @@ artifacts:
 
       Final check before moving on:
       - Confirm each current-change Source Truth item and each key source-backed scenario has at least one implementation task and one verification task unless source-truth explicitly marks it as documentation-only or deferred.
+      - Confirm every Source Truth ID referenced anywhere in `tasks.md`, including deferred/non-goal and forbidden-drift Source Truth IDs, has exactly one row in `Source Truth Coverage`.
       - Confirm every row in all three `Requirement Coverage` tables has concrete task IDs and proof.
       - Confirm every task trace block links back to specs/design/source docs and includes preserve constraints where relevant.
       - Confirm no task asks for unplanned services, integrations, routes, scenes, pages, surfaces, objects, components, states, assets, APIs, tables, jobs, events, providers, deployment environments, or source-out-of-scope behavior.
