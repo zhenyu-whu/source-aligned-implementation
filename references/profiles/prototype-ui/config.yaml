@@ -1,0 +1,6 @@
+schema: prototype-spec-driven
+
+context: |
+  Artifact language policy:
+  - 面向中文 reviewer。Artifact 的结构性标记、OpenSpec 固定标题、字段名、规范关键字、ID、路径、代码/API/DB/package 标识和常用技术术语保持英文或源文档原文。
+  - 除上述内容外，所有解释性正文、需求描述、设计说明、任务说明、风险、验收与验证说明应使用简体中文。

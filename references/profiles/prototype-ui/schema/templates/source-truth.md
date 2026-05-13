@@ -1,124 +1,128 @@
+<!--
+Language policy: 保留本模板中的 OpenSpec 结构、字段名、规范关键字、ID、路径、代码/API/DB/package 标识和常用技术术语；解释性正文、需求描述、设计说明、任务说明、风险、验收与验证说明使用简体中文。
+-->
+
 ## Source Manifest
 
 <!--
-Classify the source documents for this change before extracting Source Truth items.
-Use exact paths. Required documents must be read. Conditionally relevant documents must be read when they are referenced by required docs for the current change's routes, scenes, fixtures, mutations, assets, object states, verification checks, or later-change boundaries.
+提取 Source Truth items 前，先为此 change 分类 source documents。
+使用 exact paths。Required documents 必须读取。Conditionally relevant documents 在被 required docs 引用并影响当前 change 的 routes、scenes、fixtures、mutations、assets、object states、verification checks 或 later-change boundaries 时必须读取。
 -->
 
 | Classification | Source Document | Reason / Change Link |
 | --- | --- | --- |
-| required | <!-- exact path --> | <!-- change row / capability / route / scene / fixture / mutation / asset / verification link --> |
-| conditionally relevant and read | <!-- exact path --> | <!-- why this document affects the current change --> |
-| reference-only | <!-- exact path --> | <!-- e.g. existing capability names only; must not narrow source truth --> |
-| intentionally not read | <!-- exact path --> | <!-- concrete no-overlap reason; convenience or file size is not valid --> |
+| required | <!-- exact path --> | <!-- change row / capability / route / scene / fixture / mutation / asset / verification link；说明文字用简体中文 --> |
+| conditionally relevant and read | <!-- exact path --> | <!-- 用简体中文说明此 document 为什么影响当前 change --> |
+| reference-only | <!-- exact path --> | <!-- 例如 existing capability names only；不得缩小 source truth --> |
+| intentionally not read | <!-- exact path --> | <!-- 用简体中文说明具体 no-overlap reason；convenience 或 file size 不是有效理由 --> |
 
 ## Source Documents Read
 
-<!-- List every original PRD, architecture, prototype, design, interaction, API, data, system, and verification document read for this change. Include exact paths and relevant headings/sections. -->
+<!-- 用简体中文列出为此 change 读取过的每个 original PRD、architecture、prototype、design、interaction、API、data、system 与 verification document。包含 exact paths 与 relevant headings/sections。 -->
 
 ## Source Coverage Ledger
 
 <!--
-Maintain one row per source document read. Each document must either contribute to Source Truth, deferred/non-goal Source Truth, unresolved conflict, or an explicit no-current-change-impact note.
+每个已读取的 source document 维护一行。每个 document 必须贡献 Source Truth、deferred/non-goal Source Truth、unresolved conflict，或 explicit no-current-change-impact note。
 -->
 
 | Source Document | Sections / Anchors Read | Extraction Buckets | Coverage Outcome |
 | --- | --- | --- | --- |
-| <!-- exact path --> | <!-- headings / rows / scene IDs / fixture keys / mutation names / asset IDs / object states --> | <!-- runtime / scene-loader; scene fixtures; shared slices; mock mutations; object-state fixtures; visual assets; mark / selection / token payloads; export preview / record; state vocabulary / forbidden drift; component / responsive constraints; verification obligations; later-change / non-goal boundaries; change-specific bucket --> | <!-- ST-001, ST-002 / deferred ST-... / unresolved conflict ST-... / no-current-change-impact: reason --> |
+| <!-- exact path --> | <!-- headings / rows / scene IDs / fixture keys / mutation names / asset IDs / object states --> | <!-- runtime / scene-loader; scene fixtures; shared slices; mock mutations; object-state fixtures; visual assets; mark / selection / token payloads; export preview / record; state vocabulary / forbidden drift; component / responsive constraints; verification obligations; later-change / non-goal boundaries; change-specific bucket --> | <!-- ST-001, ST-002 / deferred ST-... / unresolved conflict ST-... / no-current-change-impact: reason；说明文字用简体中文 --> |
 
 ## Extraction Buckets
 
 <!--
-Use buckets to avoid losing source detail before consolidating Source Truth items.
-Buckets are not a substitute for Source Truth items; every implementation-relevant obligation in buckets must be represented below.
-Add change-specific buckets if needed.
+使用 buckets，避免在合并 Source Truth items 前丢失 source detail。
+Buckets 不能替代 Source Truth items；buckets 中每个 implementation-relevant obligation 都必须在下方表示。
+需要时添加 change-specific buckets。
 -->
 
 ### Runtime / Scene-Loader
 
-<!-- Route, scene config, fixture loading, shell/page/object consumption chain, and runtime boundary obligations. -->
+<!-- 用简体中文记录 route、scene config、fixture loading、shell/page/object consumption chain 与 runtime boundary obligations。 -->
 
 ### Scene Fixtures
 
-<!-- Scene IDs, fixture keys, required slice presence, representative state combinations, and fixture acceptance obligations. -->
+<!-- 用简体中文记录 Scene IDs、fixture keys、required slice presence、representative state combinations 与 fixture acceptance obligations。 -->
 
 ### Shared Slices
 
-<!-- Data slice ownership, required fields, deterministic values, and state/data boundaries. -->
+<!-- 用简体中文记录 data slice ownership、required fields、deterministic values 与 state/data boundaries。 -->
 
 ### Mock Mutations
 
-<!-- Mutation names, affected slices, allowed writes, forbidden side effects, success/failure/running semantics. -->
+<!-- 用简体中文记录 mutation names、affected slices、allowed writes、forbidden side effects、success/failure/running semantics。 -->
 
 ### Object-State Fixtures
 
-<!-- Object state variants hosted inside scenes, open/close context, local object fields, and non-scene boundaries. -->
+<!-- 用简体中文记录 hosted inside scenes 的 object state variants、open/close context、local object fields 与 non-scene boundaries。 -->
 
 ### Visual Assets
 
-<!-- Canvas, thumbnails, placeholders, empty states, export previews, dimensions, visual semantics, and no-real-asset boundaries. -->
+<!-- 用简体中文记录 canvas、thumbnails、placeholders、empty states、export previews、dimensions、visual semantics 与 no-real-asset boundaries。 -->
 
 ### Mark / Selection / Token Payloads
 
-<!-- Mark targets, selection geometry, token candidates, custom labels, stale/read-only behavior, and payload immutability. -->
+<!-- 用简体中文记录 mark targets、selection geometry、token candidates、custom labels、stale/read-only behavior 与 payload immutability。 -->
 
 ### Export Preview / Record
 
-<!-- Export preview asset, mock records, current-version-only export, and no real file generation. -->
+<!-- 用简体中文记录 export preview asset、mock records、current-version-only export 与 no real file generation。 -->
 
 ### State Vocabulary / Forbidden Drift
 
-<!-- Canonical keys, stage/overlay whitelist, no new routes/scenes/states/assets/mutations/services, and semantic separation. -->
+<!-- 用简体中文记录 canonical keys、stage/overlay whitelist、no new routes/scenes/states/assets/mutations/services 与 semantic separation。 -->
 
 ### Component / Responsive Constraints
 
-<!-- Token, component specimen, density, responsive, object degradation, and visual fidelity obligations. -->
+<!-- 用简体中文记录 token、component specimen、density、responsive、object degradation 与 visual fidelity obligations。 -->
 
 ### Verification Obligations
 
-<!-- Smoke, screenshot, object, key-flow, and source-equivalent verification obligations relevant to this change. -->
+<!-- 用简体中文记录与此 change 相关的 smoke、screenshot、object、key-flow 与 source-equivalent verification obligations。 -->
 
 ### Later-Change / Non-Goal Boundaries
 
-<!-- Source-backed deferrals and explicit non-goals that downstream artifacts must preserve. -->
+<!-- 用简体中文记录 downstream artifacts 必须保留的 source-backed deferrals 与 explicit non-goals。 -->
 
 ## Source Truth Items
 
 <!--
-Use stable IDs. Extract every source-backed item relevant to the selected change.
-Do not use this section to decide implementation shortcuts. Capture source truth first.
-Only create Source Truth items for implementation-relevant obligations: behavior to implement, behavior to preserve, verification to perform, boundaries to enforce, or conflicts to resolve.
-Do not create Source Truth items for workflow metadata, artifact readiness, dependency status, absence of blockers, "no questions", or "can proceed"; put those in Conflicts / Ambiguities or the Alignment Gate.
+使用 stable IDs。提取与所选 prototype/UI change 相关的每个 source-backed item。
+不要用本节决定 implementation shortcuts。先捕获 source truth。
+只为 implementation-relevant obligations 创建 Source Truth items：需要实现的 behavior、需要保留的 behavior、需要执行的 verification、需要执行的 boundaries，或需要解决的 conflicts。
+不要为 workflow metadata、artifact readiness、dependency status、absence of blockers、“no questions” 或 “can proceed”等流程事实创建 Source Truth items；这些内容放入 Conflicts / Ambiguities 或 Alignment Gate。
 -->
 
 ### ST-001 <!-- short source-backed obligation name -->
 
 - Source: <!-- exact file path plus heading / stable anchor / row / scene / route / object / API / asset / fixture / interaction name -->
-- Extract: <!-- copied or tightly paraphrased source truth with all implementation-relevant details preserved -->
-- Relevance: <!-- why this belongs to the current change -->
-- Implementation Implication: <!-- what proposal/spec/design/tasks/apply must preserve -->
-- Boundary: <!-- current-change scope / preserve-existing / later-change / non-goal / unresolved conflict -->
+- Extract: <!-- 使用简体中文复制或紧密改写 source truth，并保留所有 implementation-relevant details -->
+- Relevance: <!-- 用简体中文说明为什么它属于当前 change -->
+- Implementation Implication: <!-- 用简体中文说明 proposal/spec/design/tasks/apply 必须保留什么 -->
+- Boundary: <!-- current-change scope / preserve-existing / later-change / non-goal / unresolved conflict；必要说明用简体中文 -->
 
 ## Deferred / Non-Goal Source Truth
 
-<!-- List source-backed later-change and non-goal items by Source Truth ID. Do not invent deferrals that are not backed by original sources. -->
+<!-- 用简体中文按 Source Truth ID 列出 source-backed later-change 与 non-goal items。不要发明没有 original sources 支持的 deferrals。 -->
 
 ## Conflicts / Ambiguities
 
-<!-- Record conflicts, ambiguous ownership, or source gaps. Use "无" only when none remain. -->
+<!-- 用简体中文记录 conflicts、ambiguous ownership 或 source gaps。没有剩余问题时才写“无”。 -->
 
 ## Source Truth Alignment Gate
 
-- Source documents read: <!-- exact paths -->
-- Source documents intentionally not read: <!-- exact paths and reasons, or "无" -->
-- Required manifest coverage: <!-- confirm every required document is covered by Source Truth / deferred Source Truth / unresolved conflict / no-current-change-impact note -->
-- Conditional manifest coverage: <!-- confirm every conditionally relevant document was read and covered, or list blockers -->
-- Extraction bucket coverage: <!-- list each applicable bucket and the Source Truth IDs or deferred/non-goal IDs covering it -->
-- Named identifier coverage: <!-- enumerate covered scenes / routes / object states / fixture keys / slices / mutations / asset IDs / component specimens / viewports / verification checks when relevant -->
+- Source documents read: <!-- exact paths；说明文字用简体中文 -->
+- Source documents intentionally not read: <!-- exact paths and reasons，或“无”；说明文字用简体中文 -->
+- Required manifest coverage: <!-- 用简体中文确认每个 required document 都被 Source Truth / deferred Source Truth / unresolved conflict / no-current-change-impact note 覆盖 -->
+- Conditional manifest coverage: <!-- 用简体中文确认每个 conditionally relevant document 已读取并覆盖，或列出 blockers -->
+- Extraction bucket coverage: <!-- 列出每个 applicable bucket 及覆盖它的 Source Truth IDs 或 deferred/non-goal IDs；说明文字用简体中文 -->
+- Named identifier coverage: <!-- relevant 时枚举 covered scenes / routes / object states / fixture keys / slices / mutations / asset IDs / component specimens / viewports / verification checks；说明文字用简体中文 -->
 - Current-change Source Truth IDs: <!-- ST-001, ST-002, ... -->
 - Preserve-existing Source Truth IDs: <!-- ST-... or "无" -->
 - Deferred / non-goal Source Truth IDs: <!-- ST-... or "无" -->
 - Unresolved conflicts: <!-- ST-... or "无" -->
-- Completeness confirmation: <!-- confirm no relevant source-backed obligation was intentionally omitted, or list blockers -->
+- Completeness confirmation: <!-- 用简体中文确认没有 intentionally omitted 的 relevant source-backed obligation，或列出 blockers -->
 
-<!-- Source Truth ID lists must enumerate exact IDs; do not use ranges such as ST-001-ST-010. -->
+<!-- Source Truth ID lists 必须逐个枚举 exact IDs；不要使用 ST-001-ST-010 这类 ranges。 -->

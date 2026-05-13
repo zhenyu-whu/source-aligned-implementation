@@ -76,6 +76,93 @@ def copy_runtime(src_dir: Path, dst_dir: Path, force: bool) -> list[str]:
     return results
 
 
+def extract_literal_block(text: str, key: str) -> list[str]:
+    lines = text.splitlines()
+    header = f"{key}: |"
+    for index, line in enumerate(lines):
+        if line.strip() != header:
+            continue
+        block: list[str] = []
+        for block_line in lines[index + 1 :]:
+            if block_line and not block_line.startswith(" "):
+                break
+            block.append(block_line)
+        return block
+    return []
+
+
+def replace_schema_line(lines: list[str], schema_name: str) -> tuple[list[str], bool]:
+    updated = list(lines)
+    changed = False
+    for index, line in enumerate(updated):
+        if line.startswith("schema:"):
+            next_line = f"schema: {schema_name}"
+            if line != next_line:
+                updated[index] = next_line
+                changed = True
+            return updated, changed
+    return [f"schema: {schema_name}", *updated], True
+
+
+def find_literal_block(lines: list[str], key: str) -> tuple[int, int] | None:
+    header = f"{key}: |"
+    for index, line in enumerate(lines):
+        if line.strip() != header:
+            continue
+        end = index + 1
+        while end < len(lines):
+            if lines[end] and not lines[end].startswith(" "):
+                break
+            end += 1
+        return index, end
+    return None
+
+
+def has_top_level_key(lines: list[str], key: str) -> bool:
+    prefix = f"{key}:"
+    return any(line.startswith(prefix) for line in lines)
+
+
+def sync_context_policy(lines: list[str], template_context: list[str]) -> tuple[list[str], bool]:
+    if not template_context:
+        return lines, False
+
+    updated = list(lines)
+    block_range = find_literal_block(updated, "context")
+    if block_range is None:
+        if has_top_level_key(updated, "context"):
+            raise ValueError("existing config uses a non-literal context format")
+        schema_index = next((index for index, line in enumerate(updated) if line.startswith("schema:")), 0)
+        insert_at = schema_index + 1
+        insert_lines = ["", "context: |", *template_context]
+        updated[insert_at:insert_at] = insert_lines
+        return updated, True
+
+    header_index, end_index = block_range
+    block = updated[header_index + 1 : end_index]
+    policy_index = next((index for index, line in enumerate(block) if line.strip() == "Artifact language policy:"), None)
+    if policy_index is None:
+        insert_lines = [*template_context]
+        if block and block[0].strip():
+            insert_lines.append("")
+        updated[header_index + 1 : header_index + 1] = insert_lines
+        return updated, True
+
+    policy_end = policy_index + 1
+    while policy_end < len(block):
+        stripped = block[policy_end].strip()
+        if not stripped or stripped.startswith("- "):
+            policy_end += 1
+            continue
+        break
+
+    if block[policy_index:policy_end] == template_context:
+        return updated, False
+
+    updated[header_index + 1 + policy_index : header_index + 1 + policy_end] = template_context
+    return updated, True
+
+
 def update_config(openspec_dir: Path, schema_name: str) -> str:
     config = openspec_dir / "config.yaml"
     if not config.exists():
@@ -92,6 +179,40 @@ def update_config(openspec_dir: Path, schema_name: str) -> str:
             return f"updated {config}"
 
     config.write_text(f"schema: {schema_name}\n" + "\n".join(lines) + "\n", encoding="utf-8")
+    return f"updated {config}"
+
+
+def sync_config(openspec_dir: Path, schema_name: str, template: Path | None, force: bool) -> str:
+    if template is None or not template.exists():
+        return update_config(openspec_dir, schema_name)
+
+    config = openspec_dir / "config.yaml"
+    template_text = template.read_text(encoding="utf-8")
+    template_context = extract_literal_block(template_text, "context")
+
+    if not config.exists():
+        config.write_text(template_text.rstrip() + "\n", encoding="utf-8")
+        return f"created {config}"
+
+    if force:
+        if config.read_text(encoding="utf-8") == template_text.rstrip() + "\n":
+            return f"unchanged {config}"
+        config.write_text(template_text.rstrip() + "\n", encoding="utf-8")
+        return f"installed {config}"
+
+    lines = config.read_text(encoding="utf-8").splitlines()
+    lines, schema_changed = replace_schema_line(lines, schema_name)
+    try:
+        lines, context_changed = sync_context_policy(lines, template_context)
+    except ValueError as exc:
+        raise SystemExit(
+            f"Refusing to merge profile config into existing different config: {config}\n"
+            f"{exc}. Re-run with --force after reviewing the existing config."
+        ) from exc
+    if not schema_changed and not context_changed:
+        return f"unchanged {config}"
+
+    config.write_text("\n".join(lines).rstrip() + "\n", encoding="utf-8")
     return f"updated {config}"
 
 
@@ -129,6 +250,7 @@ def main() -> int:
     openspec_dir = repo_root / "openspec"
     schema_src = profile_dir / schema_dir_name
     schema_dst = openspec_dir / "schemas" / schema_name
+    config_template = profile_dir / "config.yaml"
     runtime_src = root / "references" / "agent-runtime"
     runtime_dst = openspec_dir / "agent-runtime"
 
@@ -141,7 +263,7 @@ def main() -> int:
     results = [
         copy_dir(schema_src, schema_dst, args.force),
         *copy_runtime(runtime_src, runtime_dst, args.force),
-        update_config(openspec_dir, schema_name),
+        sync_config(openspec_dir, schema_name, config_template, args.force),
     ]
     print(f"profile: {profile}")
     print(f"schema: {schema_name}")

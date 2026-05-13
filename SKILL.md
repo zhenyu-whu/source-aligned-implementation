@@ -51,5 +51,6 @@ Each profile directory must contain:
 
 - `profile.yaml` with `profile`, `schema_name`, and optional `schema_dir` (defaults to `schema` when omitted).
 - The schema directory named by `schema_dir`, containing `schema.yaml` and any templates.
+- Optional `config.yaml` with profile-owned OpenSpec config defaults such as `context`.
 
-The setup script installs the schema to `openspec/schemas/<schema_name>/` and switches `openspec/config.yaml` to that schema.
+The setup script installs the schema to `openspec/schemas/<schema_name>/`, switches `openspec/config.yaml` to that schema, and syncs profile-owned config defaults when `config.yaml` is present.
