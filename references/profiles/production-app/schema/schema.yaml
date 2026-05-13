@@ -188,6 +188,22 @@ artifacts:
       - Design MUST NOT replace source-backed production behavior with placeholder, diagnostic, mock-only, static-only, fixture-only, or sandbox-only representation unless `source-truth.md` marks that item as deferred or entry-only. Test doubles are allowed only as verification/support infrastructure around real production boundaries.
       - For each major workflow, surface, API, data contract, state machine, async job, event stream, auth/security path, storage path, or operational process, design MUST explain where it is implemented, how source state/data flows through the system, how user/system events change state, how success/failure/loading/disabled/empty/edge states are handled when source-backed, how backend/API/persistence/contracts are represented, how observability/audit is emitted, and how verification proves real behavior rather than merely key/registry/state presence.
 
+      Design depth floor:
+      - Design MUST go one level deeper than proposal/specs. Proposal defines WHY/WHAT, specs define normative behavior, and design MUST define implementation contracts sufficient for task authors and implementers to proceed without inventing behavior.
+      - Source alignment does not mean design may only repeat source text. Design MUST derive concrete implementation details required to satisfy source-backed requirements, as long as those details are minimal, technical, and do not expand product scope.
+      - For every spec requirement and scenario, design MUST identify the implementation owner package/app, concrete module or file area when knowable, public function/component/type/export names when useful, input/output contract, state/data flow, success path, failure/edge path, persistence or side effects, observability, and verification approach.
+      - If sources define behavior but not the exact implementation shape, design MUST choose the smallest source-compatible technical shape and label it as a source-backed implementation decision. This is allowed only when it does not add product scope, new capability, new provider, new persistent domain concept, or new user-visible workflow.
+      - Design MUST NOT leave executable behavior at the level of "add support", "wire auth", "handle errors", "add tests", or "create helpers" without explaining the concrete contract those helpers expose and the behavior they enforce.
+
+      Section depth requirements:
+      - Architecture / Module Boundary Design MUST list package ownership, import direction, exported entry points, forbidden imports, and where cross-package contracts live.
+      - Domain / Data / Migration Design MUST define table/entity shape, key columns, constraints, indexes, migration ownership, transaction boundaries, idempotency strategy, repository function contracts, and forbidden columns/entities.
+      - API / Auth / Security Design MUST define route/handler responsibilities, request parameters, DTO/zod validation boundaries, session/cookie handling, return-target storage and sanitization, callback success/failure branches, actor resolver contract, authorization entry points, and sensitive-data redaction rules.
+      - Async / Realtime / AI / Worker Design MUST define job/event/stream/provider contracts, payloads, ownership, locking/idempotency/retry behavior, sandbox or test-double boundary, and explicit no-op/deferred boundaries when the change defers these systems.
+      - Frontend / UX / Prototype Fidelity Design MUST define component responsibilities, props/events/state model, state transitions, disabled/failure/retry behavior, responsive variants, and which states remain local UI state versus persisted/API state.
+      - Observability / Ops / Deployment Design MUST define log/event names or categories, allowed log fields, forbidden fields, config keys or config categories, environment differences, migration ordering, staging smoke expectations, and rollback constraints.
+      - Verification Design MUST map each major behavior to a concrete verification kind: unit, DB integration, route/API, worker/job, SSE/outbox, provider sandbox, storage/asset, component, E2E, responsive visual/DOM check, static forbidden-drift check, config validation, log redaction assertion, or staging smoke.
+
       Required sections:
       - **Context**
       - **Goals / Non-Goals**
@@ -218,6 +234,12 @@ artifacts:
       - Whether assets, components, repeated UI patterns, layout rules, visual states, and responsive behavior trace to source-backed prototype references.
       - Whether observability, ops, deployment, rollout, and compatibility obligations are captured.
       - Whether later-change boundaries are preserved.
+      - Whether every spec scenario has a corresponding implementation contract in design.
+      - Whether every data mutation has table/column/constraint/transaction/idempotency details.
+      - Whether every route/API/auth path has request/session/response/error handling details.
+      - Whether every UI state has owner component, transition trigger, disabled/failure/recovery behavior, and responsive handling.
+      - Whether every observability requirement has allowed fields, forbidden fields, and failure classes or event categories.
+      - Whether any design section still requires implementers to infer behavior not stated in source-truth, specs, or design. If yes, record it as an open question or revise the design.
     requires:
       - source-truth
       - proposal

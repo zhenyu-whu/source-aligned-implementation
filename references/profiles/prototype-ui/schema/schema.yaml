@@ -184,6 +184,19 @@ artifacts:
       - Design MUST NOT replace source-backed behavior with placeholder, diagnostic, mock-only, static-only, or fixture-only representation unless `source-truth.md` marks that item as deferred or entry-only.
       - For each major workflow, surface, API, data contract, or state machine, design MUST explain where it is implemented, how source state/data flows through the system, how user/system events change state, how success/failure/loading/disabled/empty/edge states are handled when source-backed, how backend/API/persistence/contracts are represented when applicable, and how verification proves real behavior rather than merely key/registry/state presence.
 
+      Design depth floor:
+      - Design MUST go one level deeper than proposal/specs. Proposal defines WHY/WHAT, specs define normative behavior, and design MUST define implementation contracts sufficient for task authors and implementers to proceed without inventing behavior.
+      - Source alignment does not mean design may only repeat source text. Design MUST derive concrete implementation details required to satisfy source-backed prototype requirements, as long as those details are minimal, technical, and do not expand product scope, route scope, scene scope, object scope, or backend/integration scope.
+      - For every spec requirement and scenario, design MUST identify the implementation owner route/page/object/component, concrete module or file area when knowable, public component/type/export names when useful, input/output or props/events contract, fixture/data flow, state transition path, success/failure/empty/disabled/edge path, mutation or side effect, responsive behavior, and verification approach.
+      - If sources define behavior but not the exact implementation shape, design MUST choose the smallest source-compatible technical shape and label it as a source-backed implementation decision. This is allowed only when it does not add product scope, new route, new scene, new object, new persistent domain concept, new service, or new user-visible workflow.
+      - Design MUST NOT leave executable behavior at the level of "add support", "wire interaction", "handle states", "add tests", or "create components" without explaining the concrete contract those components/helpers expose and the behavior they enforce.
+
+      Section depth requirements:
+      - Runtime / Data Flow Design MUST define route ownership, scene/fixture loading path, state ownership, event dispatch path, mutation ownership, service/mock/integration boundary, and forbidden cross-layer shortcuts.
+      - Fixture / Mutation / Asset Design MUST define fixture slices, data keys, mutation names, mutation inputs/outputs, idempotency or reset behavior when relevant, asset IDs/paths, fallback behavior, and forbidden fixture-only shortcuts.
+      - Page / Object / Responsive Design MUST define page regions, object/component responsibilities, props/events/state model, state transitions, disabled/failure/retry/empty/loading behavior, responsive variants, action placement/cardinality, and which states remain local UI state versus fixture/API/backend state.
+      - Verification Design MUST map each major behavior to a concrete verification kind: unit, component, interaction/E2E, route smoke, fixture/mutation assertion, visual or DOM-region check, responsive screenshot/check, accessibility check when source-backed, static forbidden-drift check, or source-fidelity checklist.
+
       Required sections:
       - **Context**
       - **Goals / Non-Goals**
@@ -208,6 +221,11 @@ artifacts:
       - Whether assets, components, repeated UI patterns, layout rules, visual states, and responsive behavior trace to source-backed references.
       - Whether responsive obligations are captured.
       - Whether later-change boundaries are preserved.
+      - Whether every spec scenario has a corresponding implementation contract in design.
+      - Whether every route/page/surface/object interaction has owner component, event trigger, state transition, success/failure/disabled/empty handling, and verification details.
+      - Whether every fixture/data/mutation path has data keys, ownership, inputs/outputs, reset/idempotency behavior when relevant, and forbidden-drift constraints.
+      - Whether every responsive or visual requirement has viewport behavior, layout/region rules, and rendered verification approach.
+      - Whether any design section still requires implementers to infer behavior not stated in source-truth, specs, or design. If yes, record it as an open question or revise the design.
     requires:
       - source-truth
       - proposal
