@@ -1,16 +1,16 @@
 # Source-Aligned Implementation Skill
 
-This Codex skill installs source-aligned OpenSpec workflows into a target repository. It is intended for projects where implementation artifacts must stay aligned with original source documents such as PRDs, architecture notes, reviewed prototypes, API/data contracts, design references, and verification plans.
+This Codex skill synchronizes source-aligned OpenSpec workflows into a target repository. It is intended for projects where implementation artifacts must stay aligned with original source documents such as PRDs, architecture notes, reviewed prototypes, API/data contracts, design references, and verification plans.
 
-## What It Installs
+## What It Syncs
 
-The setup script copies a selected profile into the target repository:
+When a profile is selected, copy these bundled resources into the target repository:
 
 - `openspec/schemas/<schema_name>/`: profile-owned OpenSpec schema and artifact templates.
 - `openspec/agent-runtime/*.md`: runtime constraints for propose, apply, and archive workflows.
-- `openspec/config.yaml`: active schema selection plus profile-owned config defaults when provided.
+- `openspec/config.yaml`: active schema selection via top-level `schema: <schema_name>`.
 
-The skill also includes an `AGENTS.md` runtime section under `references/agent-runtime/agents-md-source-aligned-section.md`. Add or update that section in the target repository instructions after running the setup script.
+The skill also includes an `AGENTS.md` runtime section under `references/agent-runtime/agents-md-source-aligned-section.md`. Add or update that section in the target repository instructions after syncing schema/runtime files.
 
 ## Profiles
 
@@ -23,45 +23,29 @@ Each profile contains:
 
 - `profile.yaml`: profile metadata and target schema name.
 - `schema/`: OpenSpec schema and templates.
-- `config.yaml`: optional profile-owned OpenSpec config defaults such as artifact language policy.
 
 ## Usage
 
-Run the installer from this skill directory:
+Use the skill workflow in `SKILL.md`. In summary:
 
-```bash
-scripts/setup_source_aligned.py --target /path/to/repo --profile prototype-ui
-scripts/setup_source_aligned.py --target /path/to/repo --profile production-app
-```
-
-Use `--force` only after reviewing existing target files. It overwrites differing installed schema/runtime files and installs the profile config exactly.
-
-## Config Sync Behavior
-
-Without `--force`, `openspec/config.yaml` is merged conservatively:
-
-- `schema:` is inserted or updated to the selected profile schema.
-- If the profile has a literal `context: |` block, only the `Artifact language policy:` section is inserted or replaced.
-- Existing project context outside that policy is preserved.
-- Existing non-literal top-level `context:` formats are rejected instead of being rewritten implicitly.
-
-When the target config does not exist, the profile config is copied as the initial file. With `--force`, the profile config fully replaces the target config.
+1. Select one bundled profile.
+2. Read its `profile.yaml` to get `schema_name` and optional `schema_dir`.
+3. Copy the profile schema directory to `openspec/schemas/<schema_name>/`.
+4. Copy shared runtime markdown files to `openspec/agent-runtime/`.
+5. Create or update `openspec/config.yaml` so `schema:` points to `<schema_name>`, preserving unrelated project config.
+6. Add or update the source-aligned runtime section in `AGENTS.md`.
 
 ## Verification
 
-For installer changes:
-
-```bash
-python3 -m py_compile scripts/setup_source_aligned.py
-```
-
-For profile-install behavior, run the installer against a temporary repository and verify:
+After syncing a profile, verify:
 
 - `openspec/config.yaml` selects the requested schema.
 - `openspec/schemas/<schema_name>/schema.yaml` exists.
-- `openspec/agent-runtime/*.md` exists.
-- Re-running or switching profiles does not duplicate the artifact language policy.
+- `openspec/agent-runtime/openspec-propose-artifacts.md` exists.
+- `openspec/agent-runtime/openspec-apply-change.md` exists.
+- `openspec/agent-runtime/openspec-archive-change.md` exists.
+- `AGENTS.md` includes the source-aligned runtime section.
 
 ## Development Notes
 
-Keep profile changes semantically aligned. Shared behavior, such as language policy or design-depth guidance, should usually be applied to both `prototype-ui` and `production-app`, but profile-specific templates should preserve their own vocabulary and scope.
+Keep profile changes semantically aligned. Shared behavior, such as language policy or design-depth guidance, should usually live in shared runtime constraints and apply to both `prototype-ui` and `production-app`, while profile-specific templates preserve their own vocabulary and scope.

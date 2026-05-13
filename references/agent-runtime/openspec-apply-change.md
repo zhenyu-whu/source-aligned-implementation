@@ -1,6 +1,6 @@
 # openspec-apply-change 运行约束
 
-当用户要求使用 `openspec-apply-change` 技能实施某个 OpenSpec change 时，必须遵守以下约束。
+当执行或触发 `openspec-apply-change` 技能实施某个 OpenSpec change 时，必须遵守以下约束。
 
 ## 执行入口
 

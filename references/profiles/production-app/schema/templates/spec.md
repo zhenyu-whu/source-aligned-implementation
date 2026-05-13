@@ -1,26 +1,22 @@
-<!--
-Language policy: 保留本模板中的 OpenSpec 结构、字段名、规范关键字、ID、路径、代码/API/DB/package 标识和常用技术术语；解释性正文、需求描述、设计说明、任务说明、风险、验收与验证说明使用简体中文。
--->
-
 ## ADDED Requirements
 
 ### Requirement: <!-- requirement name，可保留英文技术标题 -->
-<!-- 用简体中文描述 normative behavior。保留 SHALL/MUST/MUST NOT 等规范关键字，并保持可测试。 -->
+<!-- 描述 normative behavior。保留 SHALL/MUST/MUST NOT 等规范关键字，并保持可测试。 -->
 
 Source Truth:
-- `ST-001`: <!-- exact Source Truth ID 和简体中文 obligation 摘要。逐个枚举 ID；不要使用 ST-001-ST-010 这类 ranges。 -->
+- `ST-001`: <!-- exact Source Truth ID 和 obligation 摘要。逐个枚举 ID；不要使用 ST-001-ST-010 这类 ranges。 -->
 
 Source Trace:
-- `docs/...`: <!-- exact source、section、product workflow、architecture rule、route、command、API、DTO、table、migration、event、job、queue、storage path、auth/security rule、entitlement、prototype scene/object state、fixture slice、viewport rule、deployment environment 或 verification row；解释性内容用简体中文。 -->
+- `docs/...`: <!-- exact source、section、product workflow、architecture rule、route、command、API、DTO、table、migration、event、job、queue、storage path、auth/security rule、entitlement、prototype scene/object state、fixture slice、viewport rule、deployment environment 或 verification row；解释性内容。 -->
 
 #### Scenario: <!-- scenario name -->
-- **WHEN** <!-- 用简体中文描述 condition、user action、route、command、API call、worker event、state、data mutation、auth context 或 failure path -->
-- **THEN** <!-- 用简体中文描述与 source docs 对齐的 expected observable production outcome -->
+- **WHEN** <!-- 描述 condition、user action、route、command、API call、worker event、state、data mutation、auth context 或 failure path -->
+- **THEN** <!-- 描述与 source docs 对齐的 expected observable production outcome -->
 
 ## Production Alignment Gate
 
 - Source Truth IDs covered: <!-- ST-001, ST-002, ...；逐个枚举 exact IDs，不使用 ranges -->
-- Source docs read: <!-- 使用的 exact docs files；说明文字用简体中文 -->
+- Source docs read: <!-- 使用的 exact docs files；说明文字 -->
 - Product workflow coverage: <!-- 覆盖的 workflows，或“无” -->
 - Prototype route / object / responsive coverage: <!-- 覆盖的 routes、scenes、objects、viewports，或“无” -->
 - Architecture / module coverage: <!-- 覆盖的 apps/packages/runtime boundaries，或“无” -->
@@ -31,4 +27,4 @@ Source Trace:
 - Storage / asset coverage: <!-- 覆盖的 asset layers、presigned URL、retention、export cache，或“无” -->
 - Observability / ops / deployment coverage: <!-- 覆盖的 logs、metrics、audit、env/config、rollout、maintenance loops，或“无” -->
 - Verification coverage: <!-- 覆盖的 unit/integration/e2e/contract/visual/security/ops checks，或“无” -->
-- Forbidden drift checked: <!-- 已检查的 explicit MUST NOT boundaries；说明文字用简体中文 -->
+- Forbidden drift checked: <!-- 已检查的 explicit MUST NOT boundaries；说明文字 -->
