@@ -7,10 +7,16 @@
 ## Artifact 中文约束
 
 1. 创建或修改 OpenSpec artifacts 时，必须面向中文 reviewer；适用范围包括 `openspec/changes/**`、`openspec/specs/**` 以及由 schema template 生成的 artifact 内容。
-2. Artifact 的 OpenSpec 固定结构标题、字段名、规范关键字、ID、路径、代码/API/DB/package 标识和源文档原文术语可以保持英文或原文。
-3. 除上述例外，所有解释性正文、需求描述、Requirement 正文、Scenario 的 WHEN/THEN 条件与结果正文、设计说明、任务说明、风险、验收、验证说明和 proof 说明必须使用简体中文。
-4. 每生成或修订一个 artifact 后，主 agent 必须在继续下一个 artifact 前审查语言；若发现英文解释性正文，必须先修正当前 artifact，再继续后续 OpenSpec 流程。
-5. 若 artifact instruction 或 template 要求保留英文结构标题，不得为满足中文约束改写这些固定标题；正文用中文填充即可。
+2. 固定模板结构可以保持英文或原文，不需要也不应该强行翻译。这包括 artifact instruction / template 要求的固定标题、表头、字段名、trace block 字段名、规范关键字、ID、路径、代码/API/DB/package 标识、命令、文件名、模块名、函数名、类型名、枚举值，以及需要精确引用的源文档原文术语。
+3. 上一条只豁免“固定字段或标识本身”，不豁免 agent 填写的解释性内容。凡是 agent 自己写入的句子、短语说明、表格单元格说明、trace block 字段值、proof、preserve、risk、verification、acceptance、design rationale、task description、Requirement 正文、Scenario 的 WHEN/THEN 条件与结果正文，都必须使用简体中文。
+4. 技术英文术语可以作为标识或名词短语保留，但承载语义的句子必须中文化。换言之，允许写 `fixture loader`、`MUTATION_REGISTRY`、`npm run check` 这类标识；不允许写 `Runtime checks prove selected scenes load full envelopes` 这类英文解释句。应改为“运行时检查证明选中的 scenes 能加载完整 envelope”。
+5. 表格判定规则：表头可以按 template 保持英文；表格中由 agent 填写的每个说明类单元格都按正文处理，必须中文。只有单元格内容完全由 ID、路径、代码标识、任务编号、capability 名称或源文档精确术语组成时，才可以保持英文或原文。
+6. tasks artifact 的特殊判定：`Source Truth:`、`Spec:`、`Design:`、`Source:`、`Preserve:`、`Proof:` 这些 trace 字段名可以保持英文；字段值必须中文，除非字段值只是 ID、路径、代码标识、命令或精确 requirement/scenario 名称。checkbox 后的任务标题属于 task description，必须中文。
+7. specs artifact 的特殊判定：OpenSpec 固定关键词和 heading 可保持 template 要求的形式；Requirement 正文、Scenario 的 WHEN/THEN 条件与结果说明必须中文。Requirement / Scenario 名称若由 agent 新拟定，优先中文；只有需要精确引用已有英文规范名或源文档原文术语时才保留英文。
+8. proposal / design artifact 的特殊判定：固定章节标题可保持 template 形式；Why、What、Impact、Design decisions、Risks、Open Questions、Alignment Gate 等章节下的解释性正文必须中文。
+9. 语言自查最低标准：把反引号中的代码/路径/命令/ID 暂时忽略后，每个由 agent 填写的自然语言句子仍应主要是简体中文；若剩余内容是一句英文或英文主导的说明，即判定为不合格。
+10. 每生成或修订一个 artifact 后，主 agent 必须在继续下一个 artifact 前审查语言；若发现英文解释性正文，必须先修正当前 artifact，再继续后续 OpenSpec 流程。OpenSpec 结构校验、ST 覆盖校验或 schema validate 通过，不等同于语言门禁通过。
+11. 若 artifact instruction 或 template 要求保留英文结构标题，不得为满足中文约束改写这些固定标题；正文用中文填充即可。
 
 ## Propose 执行入口
 
