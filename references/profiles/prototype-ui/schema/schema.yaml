@@ -250,6 +250,7 @@ artifacts:
       - Group related tasks under `##` numbered headings.
       - Each executable task MUST be a checkbox: `- [ ] X.Y Task description`.
       - Each checkbox MUST be followed by an indented trace block with `Source Truth:`, `Spec:`, `Design:`, `Source:`, `Preserve:`, and `Proof:` fields.
+      - Each checkbox task block MUST be separated from the next checkbox task block by one blank line. A task block is the checkbox line plus its trace block through `Proof:`. Do not insert blank lines between trace fields inside the same task block.
       - `Source Truth:` MUST list the exact Source Truth IDs implemented or verified by the task, or write `Not applicable` only for concrete repository/setup tasks that have no source-truth obligation by design.
       - Source Truth references in task trace blocks and coverage tables MUST enumerate exact IDs, for example `ST-001, ST-002, ST-003`. Ranges such as `ST-001-ST-010`, `ST-001..ST-010`, or `ST-001 through ST-010` are forbidden because they cause downstream implementers to skip source details.
       - `Spec:` MUST name the exact requirement(s) and scenario(s) implemented, or write `Not applicable` only for concrete repository/setup tasks that have no requirement by design.

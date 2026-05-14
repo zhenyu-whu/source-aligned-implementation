@@ -25,6 +25,8 @@
 | --- | --- | --- | --- | --- | --- |
 | <!-- exact design section / decision / gate item --> | <!-- 说明 material implementation、preservation 或 verification obligation。 --> | <!-- ST-001, ST-002, 或 Not applicable；逐个枚举 exact IDs，不使用 ranges --> | <!-- 例如 2.1, 4.2 --> | <!-- 例如 6.1, 6.3 --> | <!-- 说明 design-obligation proof。 --> |
 
+<!-- 每个 checkbox task block（checkbox + Source Truth/Spec/Design/Source/Preserve/Proof trace fields）与下一个 checkbox task block 之间必须保留一个空行；不要在同一 task block 的 trace fields 之间插入空行。 -->
+
 ## 1. Repository / Runtime Foundation
 
 - [ ] 1.1 <!-- 描述要实现或更新的 repository structure、workspace scripts、runtime process boundaries、config validation 或 local infrastructure foundations。 -->
