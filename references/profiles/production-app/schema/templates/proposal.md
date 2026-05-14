@@ -18,7 +18,7 @@
 
 ## Production Source Coverage
 
-<!-- 列出此 change 必须保持一致的 exact source files、sections 与 exact Source Truth IDs。包括 PRD、architecture、prototype docs、API/data/security/ops/deployment references 与 verification sources。不要使用 ST-001-ST-010 这类 Source Truth ID ranges。 -->
+<!-- 列出此 change 必须保持一致的 exact source files、sections、Source Pointers 与 exact Source Truth IDs。内容应来自 consumed ST items 的 Source Pointers / Read Notes，包括 PRD、architecture、prototype docs、API/data/security/ops/deployment references 与 verification sources。不要使用 ST-001-ST-010 这类 Source Truth ID ranges，也不要新增宽泛的整篇文档读取义务。 -->
 
 ## Non-Goals
 

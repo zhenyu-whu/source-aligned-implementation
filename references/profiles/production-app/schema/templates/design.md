@@ -12,7 +12,7 @@
 
 ## Production Source Map
 
-<!-- 将此 change 映射到 Source Truth IDs 与 exact original sources：PRD sections、architecture sections、prototype pages/objects/system docs、API/data/security/ops/deployment references 与 verification rows。 -->
+<!-- 将此 change 映射到 Source Truth IDs、ST Source Pointers / Read Notes 与 exact original sources：PRD sections、architecture sections、prototype pages/objects/system docs、API/data/security/ops/deployment references 与 verification rows。不要用整篇文档替代精准 section。 -->
 
 ## Decisions
 

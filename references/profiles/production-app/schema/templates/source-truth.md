@@ -26,6 +26,18 @@
 | --- | --- | --- | --- |
 | <!-- exact path --> | <!-- headings / rows / workflow names / route names / command names / API names / entity names / job/event types / environment names / verification rows --> | <!-- product / workflow scope; architecture / module boundaries; domain / data / migrations; API / auth / security; async / realtime / AI / worker; storage / assets; frontend / UX / prototype fidelity; observability / ops / deployment; verification obligations; later-change / non-goal boundaries; change-specific bucket --> | <!-- ST-001, ST-002 / deferred ST-... / unresolved conflict ST-... / no-current-change-impact: reason；说明文字 --> |
 
+## Section / Anchor Obligation Inventory
+
+<!--
+在合并最终 Source Truth items 前，先按 source-native structure 记录每个 required / conditionally relevant source 的候选 obligation anchor。
+每一行必须闭环到 exact ST IDs、deferred/non-goal IDs、preserve-existing IDs、unresolved-conflict IDs，或具体 no-current-change-impact reason。
+不得用 document-level summary 替代被 change row、source index、control sheet、handoff、dependency chain、identifier scan 或 high-risk scan 命中的 source anchor。
+-->
+
+| Source Document | Section / Anchor | Obligation Signals / Identifiers | Candidate Obligation | Closure |
+| --- | --- | --- | --- | --- |
+| <!-- exact path --> | <!-- heading / row / route / object / command / API / DTO / table / entity / job / event / asset / fixture / verification row / deployment anchor --> | <!-- MUST/MUST NOT、必须/不得、non-goal、later、auth、privacy、migration、transaction、idempotency、route、command、API、table、job、event、verification、failure、responsive、environment 等 signals 或“无高风险 signal” --> | <!-- 候选 product / architecture / data / API / UX / security / ops / verification / non-goal obligation；说明文字 --> | <!-- ST-001 / preserve ST-... / deferred ST-... / conflict ST-... / no-current-change-impact: concrete reason --> |
+
 ## Extraction Buckets
 
 <!--
@@ -81,11 +93,17 @@ Buckets 不能替代 Source Truth items；buckets 中每个 implementation-relev
 不要在本节决定 implementation shortcuts；先捕获 source truth。
 仅为 implementation-relevant obligations 创建 Source Truth items：需要实现的行为、需要保留的行为、需要执行的验证、需要执行的边界，或需要解决的 conflicts。
 不要为 workflow metadata、artifact readiness、dependency status、absence of blockers、“no questions” 或 “can proceed”等流程事实创建 Source Truth items；这些内容放入 Conflicts / Ambiguities 或 Alignment Gate。
+每个 ST item 必须提供 Source Pointers 和 Read Notes，作为后续 proposal/spec/design/tasks/apply 精准回读原始 source section 的接口。
+不要添加 Downstream Consumers；current-change ST item 必然被后续 artifacts 消费。
 -->
 
 ### ST-001 <!-- 简短的 source-backed obligation name，可保留英文技术术语 -->
 
 - Source: <!-- exact file path plus heading / stable anchor / row / route / object / API / command / table / event / job / asset / fixture / interaction / ops / deployment / verification name -->
+- Source Pointers:
+  - <!-- `docs/...` -> exact heading / stable anchor / row / route / object / API / command / table / event / job / asset / fixture / interaction / ops / deployment / verification name；line number 只能作为辅助 hint -->
+- Read Notes:
+  - <!-- 后续 artifacts 回读上述 source section 时必须核对的行为、标识、状态迁移、data/API shape、preserve boundary、verification obligation 或 conflict；不要列 consumer。 -->
 - Extract: <!-- 复制或紧密改写 source truth，并保留所有 implementation-relevant details -->
 - Relevance: <!-- 说明为什么它属于当前 change -->
 - Implementation Implication: <!-- 说明 proposal/spec/design/tasks/apply 必须保留什么 -->
@@ -105,7 +123,9 @@ Buckets 不能替代 Source Truth items；buckets 中每个 implementation-relev
 - Source documents intentionally not read: <!-- exact paths and reasons，或“无” -->
 - Required manifest coverage: <!-- 确认每个 required document 都被 Source Truth / deferred Source Truth / unresolved conflict / no-current-change-impact note 覆盖 -->
 - Conditional manifest coverage: <!-- 确认每个 conditionally relevant document 已读取并覆盖，或列出 blockers -->
+- Inventory closure: <!-- 确认 Section / Anchor Obligation Inventory 每一行均闭环到 exact ST IDs / deferred IDs / preserve IDs / conflict IDs / no-current-change-impact reason；若没有，列出 blocker -->
 - Extraction bucket coverage: <!-- 列出每个 applicable bucket 及覆盖它的 Source Truth IDs 或 deferred/non-goal IDs；说明文字 -->
+- Source pointer completeness: <!-- 确认每个 current-change / preserve-existing / deferred-non-goal / unresolved-conflict ST item 均有可用 Source Pointers 与 Read Notes；若没有，列出 blocker -->
 - Named identifier coverage: <!-- relevant 时枚举 covered workflows / routes / modules / commands / APIs / DTOs / entities / tables / migrations / job or event types / provider boundaries / asset or storage IDs / auth rules / entitlements / environments / verification checks -->
 - Current-change Source Truth IDs: <!-- ST-001, ST-002, ... -->
 - Preserve-existing Source Truth IDs: <!-- ST-... 或“无” -->

@@ -13,6 +13,7 @@ artifacts:
       - The schema's primary obligation is lossless derivation from authoritative source documents. For the selected change, all relevant source-backed product requirements, architecture decisions, UX/prototype behavior, data/API contracts, security/privacy rules, operational constraints, acceptance criteria, non-goals, and later-change boundaries MUST be extracted, carried forward, implemented, and verified.
       - Traceability alone is not sufficient. A citation proves origin, not coverage. Every cited source obligation MUST become an explicit Source Truth item and MUST later be represented in proposal scope, specs, design, tasks, implementation evidence, and verification evidence unless the Source Truth item records a source-backed deferral.
       - Artifacts MAY summarize source content, but MUST NOT remove implementation-relevant detail. If detail is summarized, the Source Truth item MUST link to the exact original source section that downstream artifacts and implementers must reread.
+      - Source Truth items are the downstream source-reading interface. Each item MUST carry precise `Source Pointers` and `Read Notes` so proposal, specs, design, tasks, and apply can re-read only the relevant original source sections instead of rediscovering or bulk-reading source documents.
       - No artifact may downgrade a source-backed production behavior into prototype-only, fixture-only, mock-only, static-only, placeholder, diagnostic, registry-only, or documentation-only work unless the original source or change boundary explicitly defers that behavior.
       - Prototype documents are authoritative for UX, route, state, object, fixture, interaction, and visual behavior. Architecture documents are authoritative for production implementation boundaries, technology choices, data ownership, security, async processing, observability, deployment, and test strategy. Where they overlap, preserve both unless a conflict is recorded.
 
@@ -33,6 +34,18 @@ artifacts:
       - For each source document read, maintain a Source Coverage Ledger entry with exact path, sections/headings or anchors read, relevant extraction buckets, and whether the document contributes current-change, preserve-existing, deferred/non-goal, unresolved-conflict, or no-current-change-impact material.
       - The Source Manifest and Source Coverage Ledger are part of `source-truth.md`; they are not proposal/design summaries and must not be used to reduce the reading obligation.
 
+      Zero-omission extraction protocol:
+      - Do not draft final Source Truth items directly from a broad reading summary. For every `required` and `conditionally relevant and read` document, first build a `Section / Anchor Obligation Inventory` in `source-truth.md`.
+      - The inventory MUST enumerate the source sections, headings, rows, route names, object keys, command/API/entity/job/event/asset identifiers, verification rows, or other stable anchors that were read for the selected change.
+      - For each inventory row, record the obligation signals found there: normative language, negative boundaries, non-goals, acceptance criteria, data/API shape, auth/security/privacy rules, failure/recovery behavior, UI/prototype states, verification obligations, operational constraints, named identifiers, or a concrete reason the anchor has no current-change impact.
+      - Every inventory row MUST close to one of: current-change Source Truth ID(s), preserve-existing Source Truth ID(s), deferred/non-goal Source Truth ID(s), unresolved-conflict Source Truth ID(s), or a concrete no-current-change-impact note. Unclosed inventory rows are blockers.
+      - A document-level `no-current-change-impact` outcome is valid only after its relevant sections/anchors have been inventoried and each relevant anchor has a concrete no-impact reason.
+      - Use source-native structure first: tables, headings, numbered plan rows, route lists, architecture module lists, fixture keys, interaction maps, API tables, schema/entity lists, verification matrices, and deployment or ops checklists.
+      - Use targeted high-risk scans as a backstop for each required or conditionally relevant document. Scan for source-language equivalents of MUST, MUST NOT, required, forbidden, non-goal, later, deferred, auth, privacy, security, migration, transaction, idempotency, lock, route, command, API, DTO, table, entity, job, event, queue, provider, asset, storage, verification, smoke, failure, retry, recovery, responsive, accessibility, environment, deployment, rollout, and observability.
+      - If a source file is large, read it by source-native sections and targeted anchors, but do not skip any section that is named by the change row, required documents, source index, control sheet, handoff, dependency chain, identifier scan, or high-risk scan. Large file size is not a reason to omit an anchor.
+      - Prefer explicit preservation over omission. If relevance is uncertain but the source anchor may constrain implementation or verification, create a preserve-existing, deferred/non-goal, or unresolved-conflict Source Truth item rather than dropping it.
+      - Before finalizing, compare `Source Manifest`, `Source Coverage Ledger`, `Section / Anchor Obligation Inventory`, `Extraction Buckets`, and `Source Truth Items`. If any required document, relevant anchor, candidate obligation, named identifier, bucket, or high-risk signal lacks closure, revise source-truth or record a blocker.
+
       Extraction buckets:
       - Before consolidating final Source Truth items, organize extracted obligations into named buckets relevant to the selected change.
       - Use these buckets when applicable: `product / workflow scope`, `architecture / module boundaries`, `domain / data / migrations`, `API / auth / security`, `async / realtime / AI / worker`, `storage / assets`, `frontend / UX / prototype fidelity`, `observability / ops / deployment`, `verification obligations`, and `later-change / non-goal boundaries`.
@@ -46,8 +59,10 @@ artifacts:
       - Do NOT create Source Truth items only for workflow metadata, artifact readiness, dependency status, current active-change status, absence of blockers, "no questions", "can proceed", or other process facts. Put those facts in `Conflicts / Ambiguities` or `Source Truth Alignment Gate` instead.
       - `Boundary: current-change scope` MUST NOT be used for process/readiness facts. It is reserved for source-backed product, system, data, interaction, UI, API, verification, security, operational, or implementation-boundary obligations that affect implementation.
       - Each item MUST have a stable ID such as `ST-001`.
-      - Each item MUST include `Source`, `Extract`, `Relevance`, `Implementation Implication`, and `Boundary`.
+      - Each item MUST include `Source`, `Source Pointers`, `Read Notes`, `Extract`, `Relevance`, `Implementation Implication`, and `Boundary`.
       - `Source` MUST cite exact file paths plus headings, stable anchors, row names, route names, object keys, interaction names, API names, domain command names, table/entity names, event names, asset IDs, fixture slices, deployment/runtime anchors, verification rows, or short source phrases where headings are insufficient.
+      - `Source Pointers` MUST list the canonical original source locations downstream artifacts should re-read for this item. Use exact paths plus headings, stable anchors, row names, route names, object keys, interaction names, API names, domain command names, table/entity names, event names, asset IDs, fixture slices, deployment/runtime anchors, verification rows, or short source phrases. Line numbers MAY be included as hints only when they are current and stable enough for local navigation.
+      - `Read Notes` MUST tell downstream artifacts what to verify when re-reading the pointed source sections, such as exact behavior, identifiers, state transitions, data/API shape, preservation boundary, verification obligation, or conflict. Do not list downstream consumers; current-change Source Truth items are inherently consumed by proposal, specs, design, tasks, and apply.
       - `Extract` MAY copy source text or tightly paraphrase it, but MUST preserve all implementation-relevant details.
       - `Boundary` MUST say whether the item is current-change scope, preserve-existing scope, explicit later-change scope, explicit non-goal, or unresolved conflict. Do not invent a smaller boundary because implementation seems large.
       - If source documents conflict, overlap ambiguously, leave later-change ownership unclear, or make production implementation unsafe without a missing decision, record a blocker item. Do not silently choose the weaker interpretation.
@@ -56,7 +71,9 @@ artifacts:
       - `source-truth.md` MUST end with `## Source Truth Alignment Gate`.
       - The gate MUST list source documents read, source documents intentionally not read with reasons, current-change Source Truth IDs, preserve-existing Source Truth IDs, deferred/non-goal Source Truth IDs, unresolved conflicts, and confirmation that no relevant source-backed obligation was intentionally omitted.
       - The gate MUST include a coverage checklist that confirms every manifest-required document is covered by Source Truth, deferred/non-goal Source Truth, unresolved conflict, or a concrete no-current-change-impact note.
+      - The gate MUST confirm every inventory row has closure to exact Source Truth IDs, deferred/non-goal IDs, unresolved-conflict IDs, preserve-existing IDs, or a concrete no-current-change-impact note.
       - The gate MUST confirm every applicable extraction bucket is covered by at least one Source Truth item or a deferred/non-goal item.
+      - The gate MUST confirm every current-change, preserve-existing, deferred/non-goal, and unresolved-conflict Source Truth item has usable `Source Pointers` and `Read Notes` unless the item explicitly records why a pointer cannot exist.
       - When the change defines named product workflows, routes, modules, domain commands, APIs, DTOs, database entities/tables, migrations, job/event types, provider boundaries, asset/storage IDs, auth/security rules, entitlement names, deployment environments, prototype states, or verification checks, the gate MUST enumerate those covered identifiers explicitly or record an unresolved conflict.
     requires: []
 
@@ -68,8 +85,11 @@ artifacts:
       Create the proposal document that establishes WHY this production change is needed and WHAT production capability boundary it owns.
 
       Before writing:
-      - Read `source-truth.md` first and treat it as the mandatory source extraction index for this change.
-      - Re-read the original source sections referenced by every current-change Source Truth item.
+      - Read `source-truth.md` first and treat the Source Truth items, their `Source Pointers`, and their `Read Notes` as the mandatory source-reading interface for this change.
+      - Consume only the Source Truth items relevant to proposal scope plus any preserve-existing, deferred/non-goal, or unresolved-conflict items that define proposal boundaries.
+      - Re-read original source documents through the `Source Pointers` on those Source Truth items. Use focused windows around the cited headings, anchors, rows, identifiers, or short source phrases; do not bulk-read source documents to rediscover scope.
+      - Use the Source Manifest, Source Coverage Ledger, Extraction Buckets, and Source Truth Alignment Gate only as coverage sanity checks. Do not re-extract source truth or perform a full source-truth content review in the proposal phase.
+      - If a Source Truth item lacks usable `Source Pointers` or `Read Notes`, treat that as a source-truth defect and revise source-truth before writing proposal.
       - Check `openspec/specs/` to determine whether each capability is new or modified.
 
       Proposal-specific constraints:
@@ -77,7 +97,7 @@ artifacts:
       - Source Truth references MUST enumerate exact IDs, for example `ST-001, ST-002, ST-003`. Ranges such as `ST-001-ST-010`, `ST-001..ST-010`, or `ST-001 through ST-010` are forbidden in generated artifacts.
       - The proposal MUST preserve the source-defined capability boundary, production dependency order, architecture/module ownership, rollout constraints, and explicit non-goals unless it calls out a source conflict.
       - `What Changes` MUST name the in-scope product surfaces, routes, domain commands, APIs, database entities/migrations, worker jobs, events/SSE streams, storage/assets, auth/security rules, billing/entitlement rules, observability/ops surfaces, deployment/environment changes, and verification surface when relevant, with Source Truth IDs.
-      - `Production Source Coverage` MUST list exact source files and Source Truth IDs that later specs and design must trace to.
+      - `Production Source Coverage` MUST list exact source files, pointed sections/anchors, and Source Truth IDs from the consumed Source Truth items. It MUST preserve the source pointers needed by later specs and design without adding broad document-reading obligations.
       - `Non-Goals` MUST include only items backed by source-truth boundaries or global forbidden drift, and MUST cite their Source Truth IDs where applicable.
       - Do not introduce new page, object, lifecycle stage, route, state, fixture slice, interaction, API, domain command, table, job type, event type, external integration, provider, entitlement, deployment environment, or operational process unless it is backed by source truth.
 
@@ -104,9 +124,11 @@ artifacts:
       Create specification files that define WHAT the production system should do.
 
       Before writing:
-      - Read `source-truth.md`, proposal, and every original source section referenced by current-change Source Truth IDs.
-      - Re-read the source-defined product behavior, architecture/module boundary, runtime/process baseline, data ownership, API/DTO, auth/security, async/realtime, AI/provider, storage/assets, billing/entitlement, observability/ops, deployment, and verification documents referenced by source-truth, proposal, or project context.
-      - If the change touches visuals, assets, repeated components, objects, surfaces, or responsive behavior, also re-read the source-defined prototype page/object/system documents, design system, layout, interaction, responsive, and verification references.
+      - Read `source-truth.md` and proposal, then select the Source Truth items that map to each proposed capability.
+      - For each selected Source Truth item, re-read only the original source sections named by its `Source Pointers` and guided by its `Read Notes`. Use focused windows around the cited headings, anchors, rows, identifiers, or short source phrases.
+      - Do not re-read broad product, architecture, prototype, design, interaction, API, data, security, ops, deployment, or verification documents unless a consumed Source Truth item points to the specific section or a missing pointer/conflict blocks faithful specification.
+      - If the change touches visuals, assets, repeated components, objects, surfaces, or responsive behavior, re-read the source-defined prototype references only through the relevant Source Truth item `Source Pointers`.
+      - If a Source Truth item needed for specs lacks usable `Source Pointers` or `Read Notes`, treat that as a source-truth defect and revise source-truth before drafting specs.
       - If modifying an existing capability, read `openspec/specs/<capability>/spec.md` before drafting the delta spec.
 
       Source Truth closure:
@@ -173,8 +195,10 @@ artifacts:
 
       Before writing:
       - Read `source-truth.md`, proposal, and all delta specs for this change.
-      - Read every original source section referenced by current-change Source Truth IDs, proposal `Production Source Coverage`, and each spec `Source Trace`.
-      - Re-read the source-defined product behavior, architecture/module boundary, runtime/process baseline, data model, migrations, service/integration, auth/security/privacy, async/realtime/worker, AI/provider, storage/assets, layout, state, interaction, observability/ops, deployment, and verification boundary documents relevant to the change.
+      - For every Source Truth item, proposal coverage entry, and spec Source Trace that affects design, re-read original source sections through the corresponding `Source Pointers` and `Read Notes`.
+      - Use focused windows around the cited headings, anchors, rows, identifiers, or short source phrases. Do not bulk-read source documents or rediscover source truth in the design phase.
+      - If proposal coverage or spec Source Trace cites a source section that is not reachable from a Source Truth item `Source Pointers`, revise the upstream artifact or source-truth before drafting design.
+      - When design needs product behavior, architecture/module boundary, runtime/process baseline, data model, migrations, service/integration, auth/security/privacy, async/realtime/worker, AI/provider, storage/assets, layout, state, interaction, observability/ops, deployment, or verification source detail, consume those details through already selected Source Truth item `Source Pointers` / `Read Notes`; if the needed detail is not reachable through pointers, revise source-truth instead of broad-reading documents in design.
       - Use project context and artifact rules to identify the concrete package boundaries, app boundaries, registries, vocabularies, readiness docs, or equivalent source references for the current repository.
 
       Design-specific constraints:
@@ -254,7 +278,9 @@ artifacts:
 
       Before writing:
       - Read `source-truth.md`, proposal, all delta specs, and design.
-      - Read every original source section referenced by current-change Source Truth IDs, `Production Source Coverage`, spec `Source Trace`, design `Production Source Map`, and design `Production Alignment Gate`.
+      - For every Source Truth item, `Production Source Coverage` entry, spec `Source Trace`, design `Production Source Map`, and design `Production Alignment Gate` item that affects tasks, re-read original source sections through the corresponding Source Truth item `Source Pointers` and `Read Notes`.
+      - Use focused windows around the cited headings, anchors, rows, identifiers, or short source phrases. Do not bulk-read source documents or re-extract source truth in the tasks phase.
+      - If any task-relevant Source Truth item lacks usable `Source Pointers` or `Read Notes`, or if an upstream artifact cites source material not reachable through Source Truth pointers, revise upstream artifacts before writing tasks.
       - Treat missing or failed alignment gates as blockers. Revise upstream artifacts before writing tasks.
 
       **IMPORTANT: Follow the template's checkbox format exactly.** The apply phase parses `- [ ]` leaf tasks to track progress. Tasks not using that format will not be tracked.
@@ -331,8 +357,8 @@ apply:
   requires: [tasks]
   tracks: tasks.md
   instruction: |
-    Read source-truth, proposal, specs, design, tasks, and every cited original source section before coding.
-    Before editing for any task, read that task's `Source Truth:`, `Spec:`, `Design:`, `Source:`, `Preserve:`, and `Proof:` fields, the linked Source Truth items, and the original source sections they cite.
+    Read source-truth, proposal, specs, design, and tasks before coding, but consume source documents through the linked Source Truth item `Source Pointers` and `Read Notes`.
+    Before editing for any task, read that task's `Source Truth:`, `Spec:`, `Design:`, `Source:`, `Preserve:`, and `Proof:` fields, the linked Source Truth items, and only the focused original source sections identified by their Source Pointers unless a conflict or missing pointer blocks implementation.
     If a pending task is missing those trace fields, or if its trace does not cover the relevant Source Truth item, Requirement scenario, or design obligation, pause and update artifacts before implementation.
     If any artifact uses Source Truth ID ranges such as `ST-001-ST-010`, pause and update artifacts to enumerate exact Source Truth IDs before implementation.
     Work through pending tasks in order and mark complete as you go.

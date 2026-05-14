@@ -31,7 +31,7 @@
   Source Truth: <!-- 此任务实现或验证的 exact ST-... IDs。逐个枚举 IDs，不使用 ranges。 -->
   Spec: <!-- Requirement / scenario names。 -->
   Design: <!-- Architecture / module boundary 或 runtime foundation obligations。 -->
-  Source: <!-- Architecture sections、package boundary rules、engineering baseline、deployment/environment anchors。 -->
+  Source: <!-- 来自相关 ST item 的 Source Pointers / Read Notes；填写 Architecture sections、package boundary rules、engineering baseline、deployment/environment anchors。 -->
   Preserve: <!-- 说明必须保留的 monorepo boundaries、script conventions、config ownership、environment parity、forbidden parallel tooling 与 runtime process constraints。 -->
   Proof: <!-- 说明 workspace command、config validation、local infra、typecheck/lint/test 或 runtime startup evidence 如何证明 source-backed foundation。 -->
 
@@ -41,7 +41,7 @@
   Source Truth: <!-- 此任务实现或验证的 exact ST-... IDs。逐个枚举 IDs，不使用 ranges。 -->
   Spec: <!-- Requirement / scenario names。 -->
   Design: <!-- Domain / data / migration / auth design obligations。 -->
-  Source: <!-- PRD object model、architecture data model、auth/security、billing/entitlement、idempotency、lock 或 migration anchors。 -->
+  Source: <!-- 来自相关 ST item 的 Source Pointers / Read Notes；填写 PRD object model、architecture data model、auth/security、billing/entitlement、idempotency、lock 或 migration anchors。 -->
   Preserve: <!-- 说明必须保留的 domain ownership、transaction boundaries、current-state/log split、table invariants、idempotency semantics、lock semantics、authorization rules、privacy boundaries 与 forbidden direct table writes。 -->
   Proof: <!-- 说明 domain unit test、db integration test、migration check、authorization negative test、idempotency assertion 或 data invariant evidence 如何通过。 -->
 
@@ -51,7 +51,7 @@
   Source Truth: <!-- 此任务实现或验证的 exact ST-... IDs。逐个枚举 IDs，不使用 ranges。 -->
   Spec: <!-- Requirement / scenario names。 -->
   Design: <!-- API / async / realtime / AI / worker design obligations。 -->
-  Source: <!-- API protocol、SSE envelope、action/job chain、provider sandbox、worker transaction、outbox、reconciler、export/storage anchors。 -->
+  Source: <!-- 来自相关 ST item 的 Source Pointers / Read Notes；填写 API protocol、SSE envelope、action/job chain、provider sandbox、worker transaction、outbox、reconciler、export/storage anchors。 -->
   Preserve: <!-- 说明必须保留的 DTO shape、command/use-case entry、minimal queue payload、DB-as-truth recovery、provider/sandbox separation、SSE replay semantics、status transitions 与 no optimistic business facts。 -->
   Proof: <!-- 说明 API/contract test、worker integration test、SSE/outbox replay test、provider sandbox fixture replay、failure/retry/reconciler test 或 export/cache assertion 如何通过。 -->
 
@@ -61,7 +61,7 @@
   Source Truth: <!-- 此任务实现或验证的 exact ST-... IDs。逐个枚举 IDs，不使用 ranges。 -->
   Spec: <!-- Requirement / scenario names。 -->
   Design: <!-- Frontend / UX / prototype fidelity design obligations。 -->
-  Source: <!-- PRD flow/page/module anchors、prototype page/object/system docs、interaction map、state vocabulary、design-system、component specimen、verification matrix anchors。 -->
+  Source: <!-- 来自相关 ST item 的 Source Pointers / Read Notes；填写 PRD flow/page/module anchors、prototype page/object/system docs、interaction map、state vocabulary、design-system、component specimen、verification matrix anchors。 -->
   Preserve: <!-- 说明必须保留的 route ownership、UI regions、action placement/cardinality、local-vs-server state split、fixture-derived states、object semantics、responsive behavior、accessibility 与 forbidden prototype drift。 -->
   Proof: <!-- 说明 user-equivalent E2E、component test、route smoke、visual/responsive screenshot、accessibility check 或 client-state interaction evidence 如何通过。 -->
 
@@ -71,7 +71,7 @@
   Source Truth: <!-- 此任务实现或验证的 exact ST-... IDs。逐个枚举 IDs，不使用 ranges。 -->
   Spec: <!-- Requirement / scenario names。 -->
   Design: <!-- Observability / ops / deployment / rollout obligations。 -->
-  Source: <!-- Security/privacy、storage、observability、audit、deployment、environment、maintenance loop 或 rollout anchors。 -->
+  Source: <!-- 来自相关 ST item 的 Source Pointers / Read Notes；填写 Security/privacy、storage、observability、audit、deployment、environment、maintenance loop 或 rollout anchors。 -->
   Preserve: <!-- 说明必须保留的 private-by-default data/assets、presigned URL authorization、sensitive-log redaction、trace/audit keys、local/staging/production separation、maintenance ownership、deployment compatibility 与 forbidden public exposure。 -->
   Proof: <!-- 说明 security/privacy test、audit/log assertion、env/config check、maintenance loop test、migration dry run、deployment smoke 或 operational readiness evidence 如何通过。 -->
 
@@ -81,6 +81,6 @@
   Source Truth: <!-- 此任务实现或验证的 exact ST-... IDs。逐个枚举 IDs，不使用 ranges。 -->
   Spec: <!-- 此 verification 覆盖的 Requirement / scenario names。 -->
   Design: <!-- 此 verification 覆盖的 design obligations。 -->
-  Source: <!-- Verification strategy、architecture testing section、prototype verification matrix、security/privacy rules、API/data contracts、worker/realtime anchors。 -->
+  Source: <!-- 来自相关 ST item 的 Source Pointers / Read Notes；填写 Verification strategy、architecture testing section、prototype verification matrix、security/privacy rules、API/data contracts、worker/realtime anchors。 -->
   Preserve: <!-- 说明 verification 必须证明 source-level structure、count、region、state、interaction、data persistence、API contract、auth path、event/job behavior、failure/recovery、responsive behavior 或 ops/deployment constraints；仅 text-existence checks 不足。 -->
   Proof: <!-- 说明 targeted verification command 通过，并覆盖相关 spec scenarios、design obligations、source docs 与 preserve constraints。 -->

@@ -14,7 +14,7 @@
 1. **Gate 1 / Apply 前任务覆盖检查**：在分派 worker 之前，主 agent 必须检查任务 artifact 是否包含 `Requirement Coverage`，以及所有未完成 checkbox 任务是否带有 `Source Truth`、`Spec`、`Design`、`Source`、`Preserve`、`Proof` trace 字段。若缺少这些结构，或明显存在 Source Truth item / scenario / design obligation 没有 implementation task、verification task 或 proof 的 coverage 表行，必须暂停实现并要求先更新 tasks artifact。若 artifact 仍包含未完成的 `Prototype Source Lock` 或等价的 source-reading / reconciliation-only checkbox 章节，视为过期任务结构：暂停实现，先更新 tasks artifact，把仍有代码或验证价值的内容迁移到具体实现或验证章节。
 2. **Gate 2 / Design obligation 提取检查**：worker 在实现某个任务前，必须从该任务 trace 字段指向的 design/source 片段中提取“可执行设计义务 checklist”，至少包括：接口/路由默认路径、依赖注入默认路径、auth/session 解析、DB/repository wiring、provider/sandbox wiring、env/config、错误/隐私边界、交互状态、responsive 约束和 deferred boundary 中与本任务相关的项。若 design 片段包含这些义务但任务摘要或 Proof 未覆盖，worker 必须停止并报告 artifact mismatch，不得按较弱任务实现或勾选。
 3. **Gate 3 / 默认路径与 no-mock 关键路径检查**：凡任务涉及 Route Handler、auth、session、DB、AI/provider、storage、queue、SSE、worker、external service adapter、env/config 或 deployment wiring，Proof 必须包含至少一个覆盖“真实导出/default dependency/default config”的验证。mock、stub、dependency injection、Playwright route intercept、fixture-only 或 isolated unit test 只能作为补充，不能作为该关键路径的唯一完成证据。若 default path 尚不可运行，任务必须保持未勾选，并记录 blocker 或补充任务。
-4. **Gate 4 / Worker 勾选前 proof 检查**：worker 在实现某个任务前，必须读取该任务 trace 字段指向的 source-truth、specs、design 和原始 source docs 相关片段；勾选前必须执行或说明 `Proof` 中列出的完成证据，并在最终回复中按任务列出 proof 结果。若任务摘要、Proof 或实现弱于 source-truth、spec scenario、linked design obligation 或原始 source docs，worker 必须停止并报告 artifact mismatch，不得按较弱任务实现或勾选。
+4. **Gate 4 / Worker 勾选前 proof 检查**：worker 在实现某个任务前，必须读取该任务 trace 字段指向的 source-truth、specs、design，以及 linked Source Truth item 的 `Source Pointers` / `Read Notes` 指向的原始 source docs 定点片段；勾选前必须执行或说明 `Proof` 中列出的完成证据，并在最终回复中按任务列出 proof 结果。若任务摘要、Proof 或实现弱于 source-truth、spec scenario、linked design obligation 或原始 source docs，worker 必须停止并报告 artifact mismatch，不得按较弱任务实现或勾选。
 5. **Gate 5 / Proof 强度检查**：若 `Proof` 只写 broad command（例如 `pnpm -w test`、`pnpm -w test:e2e`、`pnpm -w lint`）或泛称“API contract tests 通过”，worker 必须在最终回复中列出该命令下具体哪个测试/断言/手工验证覆盖了哪个 Source Truth、spec scenario 和 design obligation。无法逐项对应时，不能把该 broad command 作为勾选依据。
 6. **Gate 6 / 完成后 coverage audit**：所有 worker 返回后，主 agent 必须统一核对 `Requirement Coverage` 三张表的每一行是否有已勾选任务、实现证据、验证证据，并能回链到 Source Truth IDs、spec scenario、linked design obligation 和原始 source docs。若发现文本存在但结构、数量、区域、交互、data/API contract、默认 runtime wiring、auth/session、env/config、失败/边界或 responsive 约束未被证明，不得视为 ready for archive。
 7. Coverage gate 是实现质量闸门，不替代 OpenSpec artifacts。若 gate 暴露 task 与 specs/design/source docs 不一致，应更新对应 artifact，而不是用代码绕过。
@@ -35,14 +35,14 @@
 4. 启动 subagent 时必须明确传入：
    - change 名称。
    - schema 名称。
-   - `contextFiles` 路径清单，并要求 worker 自行读取与本章节任务相关的 source-truth、proposal、specs、design、tasks 和源文档内容。
+   - `contextFiles` 路径清单，并要求 worker 自行读取与本章节任务相关的 source-truth、proposal、specs、design、tasks；源文档内容必须通过 linked Source Truth item 的 `Source Pointers` / `Read Notes` 定点读取。
    - 对应一级章节的完整任务内容，包括每个任务的 `Source Truth`、`Spec`、`Design`、`Source`、`Preserve`、`Proof` trace 字段。
    - 与本章节任务 ID 相关的 `Requirement Coverage` 行。
    - 预期交付物。
    - 允许修改的代码范围或模块边界。
    - 任务状态更新要求：worker 完成并验证自己章节内任务后，必须自行把对应任务文件 checkbox 从 `- [ ]` 更新为 `- [x]`；未完成、未验证、缺少 trace 字段、`Proof` 未执行或存在 blocker 的任务不得勾选。
    - 最终回复要求：列出完成并已勾选的任务、每个任务覆盖的 `Requirement Coverage` 行、每个任务提取出的 design obligation checklist、每个 obligation 的实现文件和验证证据、每个任务的 proof 结果、未勾选任务及原因、修改的文件、执行的验证命令、未验证项、潜在冲突或 blocker。
-5. 必须明确告知 subagent：它负责读取并遵守完成本章节所需的 OpenSpec context 和被引用 source docs；实现前必须先读取任务 trace 字段指向的 source-truth、specs、design 和原始 source docs 相关片段，并从 linked design/source 片段提取可执行设计义务 checklist；若发现 context 冲突、任务边界不清、trace 缺失、proof 不可执行、任务摘要或 proof 弱于 source-truth / spec scenario / linked design obligation / 原始 source docs，或需要跨章节决策，必须停止猜测并在最终回复中标明 blocker。
+5. 必须明确告知 subagent：它负责读取并遵守完成本章节所需的 OpenSpec context 和被引用 source docs；实现前必须先读取任务 trace 字段指向的 source-truth、specs、design，并通过 linked Source Truth item 的 `Source Pointers` / `Read Notes` 定点读取原始 source docs 相关片段，再从 linked design/source 片段提取可执行设计义务 checklist；若发现 context 冲突、任务边界不清、trace 缺失、Source Pointers 缺失、proof 不可执行、任务摘要或 proof 弱于 source-truth / spec scenario / linked design obligation / 原始 source docs，或需要跨章节决策，必须停止猜测并在最终回复中标明 blocker。
 6. 必须明确告知 subagent：涉及 runtime wiring 的任务必须验证默认路径；不得只用 mock actor、mock command、stub repository、fixture-only provider、Playwright route intercept 或 dependency-injected unit test 证明真实路径完成。若只能通过注入依赖验证，必须补充真实导出/default dependency/default config 的测试或手工验证，否则不得勾选。
 7. 必须明确告知 subagent：它不是唯一的开发者，不得回滚或覆盖其他 agent / 用户的改动，遇到重叠文件或冲突风险必须适配现有改动并在最终回复中说明。
 

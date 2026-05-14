@@ -7,7 +7,7 @@ Source Truth:
 - `ST-001`: <!-- exact Source Truth ID 和 obligation 摘要。逐个枚举 ID；不要使用 ST-001-ST-010 这类 ranges。 -->
 
 Source Trace:
-- `docs/...`: <!-- exact source、section、product workflow、architecture rule、route、command、API、DTO、table、migration、event、job、queue、storage path、auth/security rule、entitlement、prototype scene/object state、fixture slice、viewport rule、deployment environment 或 verification row；解释性内容。 -->
+- `docs/...`: <!-- 来自相关 ST item 的 Source Pointers / Read Notes；填写 exact source、section、product workflow、architecture rule、route、command、API、DTO、table、migration、event、job、queue、storage path、auth/security rule、entitlement、prototype scene/object state、fixture slice、viewport rule、deployment environment 或 verification row；不要用整篇文档替代精准 section。 -->
 
 #### Scenario: <!-- scenario name -->
 - **WHEN** <!-- 描述 condition、user action、route、command、API call、worker event、state、data mutation、auth context 或 failure path -->
@@ -16,7 +16,7 @@ Source Trace:
 ## Production Alignment Gate
 
 - Source Truth IDs covered: <!-- ST-001, ST-002, ...；逐个枚举 exact IDs，不使用 ranges -->
-- Source docs read: <!-- 使用的 exact docs files；说明文字 -->
+- Source docs read: <!-- 使用的 exact docs files 与 Source Pointers；说明文字，不要写宽泛整篇读取义务 -->
 - Product workflow coverage: <!-- 覆盖的 workflows，或“无” -->
 - Prototype route / object / responsive coverage: <!-- 覆盖的 routes、scenes、objects、viewports，或“无” -->
 - Architecture / module coverage: <!-- 覆盖的 apps/packages/runtime boundaries，或“无” -->
